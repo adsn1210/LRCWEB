@@ -1,0 +1,7 @@
+Color Principal del Texto y un Bloque (Taupe): #AD8E7F
+
+Color del Bloque Izquierdo (Beige Rosado): #D6A99A
+
+Color del Bloque Superior Derecho (Gris): #9FA5AA
+
+Color del Bloque Inferior Derecho (Gris Pálido): #CECBC4

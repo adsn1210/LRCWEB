@@ -1,0 +1,33 @@
+@import "tailwindcss";
+
+/*
+ * Paleta de marca (Docs/05-contenidos-y-diseno.md, Docs/branding/PaletaDe colores.txt)
+ * y tokens de Docs/FRONTEND.md sección 2, adaptados al @theme de Tailwind v4.
+ */
+@theme {
+  --color-base-50: #faf9f7;
+  --color-base-100: #f3f1ec;
+  --color-base-200: #e5e1da;
+
+  --color-ink-700: #4a453d;
+  --color-ink-900: #221f1b;
+
+  --color-accent-500: #ad8e7f; /* Taupe — logo actual */
+  --color-accent-600: #96733f;
+
+  --color-brand-taupe: #ad8e7f;
+  --color-brand-beige: #d6a99a;
+  --color-brand-gray: #9fa5aa;
+  --color-brand-gray-pale: #cecbc4;
+
+  --color-success: #3f7d5c;
+  --color-danger: #b3413a;
+
+  --font-serif: var(--font-fraunces);
+  --font-sans: var(--font-inter);
+}
+
+body {
+  background: var(--color-base-50);
+  color: var(--color-ink-900);
+}
