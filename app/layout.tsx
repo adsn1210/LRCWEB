@@ -18,6 +18,8 @@ export const metadata: Metadata = {
     "Encimeras de cocina (porcelánico, cuarzo compacto, granito), muebles a medida y reformas integrales de cocina, baño y vivienda en Madrid.",
 };
 
+// Cabecera/pie/WhatsApp/cookies viven en app/(marketing)/layout.tsx, no aquí: este layout raíz
+// también envuelve /studio (Sanity), que necesita el lienzo completo sin cromo de marketing.
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="es" className={`${fraunces.variable} ${inter.variable} h-full antialiased`}>

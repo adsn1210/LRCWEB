@@ -1,18 +1,211 @@
-import Image from "next/image";
+import type { Metadata } from "next";
+import Link from "next/link";
+import { Hero } from "@/components/marketing/Hero";
+import { ServiceCard } from "@/components/marketing/ServiceCard";
+import { MaterialCard } from "@/components/marketing/MaterialCard";
+import { ProjectCard, type ProjectCardData } from "@/components/marketing/ProjectCard";
+import { ArrowRightIcon, BathIcon, CountertopIcon, HouseIcon, MailIcon, PhoneIcon, PotIcon } from "@/components/ui/icons";
 
-// TODO: reemplazar por el contenido real de la home (Docs/03-arquitectura-informacion-sitemap.md)
-// cuando arranque la Fase 2 (Desarrollo core) — este placeholder solo confirma que el
-// andamiaje de Next.js + Tailwind + fuentes + paleta de marca funciona correctamente.
+export const metadata: Metadata = {
+  title: "La Reina de la Casa | Encimeras y reformas en Madrid",
+  description:
+    "Encimeras de cocina (porcelánico, cuarzo compacto, granito), muebles a medida y reformas integrales de cocina, baño y vivienda en Madrid.",
+};
+
+const services = [
+  {
+    icon: CountertopIcon,
+    title: "Encimeras de cocina",
+    description: "Porcelánico, cuarzo compacto y granito a medida, con plantillado e instalación por nuestro equipo.",
+    href: "/servicios/encimeras-de-cocina",
+  },
+  {
+    icon: PotIcon,
+    title: "Reforma de cocina",
+    description: "Diseño, mobiliario a medida, encimera y electrodomésticos: tu cocina nueva sin complicaciones.",
+    href: "/servicios/reformas-de-cocina",
+  },
+  {
+    icon: BathIcon,
+    title: "Reforma de baño",
+    description: "Alicatado, sanitarios, mampara y encimera de baño con acabados a la altura de tu cocina.",
+    href: "/servicios/reformas-de-bano",
+  },
+  {
+    icon: HouseIcon,
+    title: "Reforma integral",
+    description: "Vivienda o local completo: albañilería, instalaciones y acabados con un único interlocutor.",
+    href: "/servicios/reformas-integrales",
+  },
+];
+
+const materials = [
+  {
+    title: "Porcelánico",
+    description: "Muy resistente a rayaduras y altas temperaturas, en formatos de gran tamaño y sin juntas visibles.",
+    href: "/materiales/porcelanico",
+    gradient: "linear-gradient(135deg,#e9e5dd,#cec7ba 45%,#e2ddd2)",
+  },
+  {
+    title: "Cuarzo compacto",
+    description: "Superficie no porosa, fácil de limpiar y con una amplia gama de colores y texturas.",
+    href: "/materiales/cuarzo-compacto",
+    gradient: "linear-gradient(135deg,#efe9e4,#d6a99a 55%,#c98f7c)",
+  },
+  {
+    title: "Granito",
+    description: "Piedra natural de máxima dureza, con vetas únicas en cada pieza.",
+    href: "/materiales/granito",
+    gradient: "linear-gradient(135deg,#dfe1e2,#9fa5aa 50%,#6f757a)",
+  },
+];
+
+// TODO: sustituir por proyectos reales desde Sanity (documento `project`, featured=true) en cuanto
+// LRC facilite fotografías; de momento se muestran con degradados de textura como placeholder.
+const featuredProjects: ProjectCardData[] = [
+  {
+    title: "Reforma de cocina",
+    tagLine: "Reforma de cocina · Cuarzo compacto · Alcorcón",
+    beforeGradient: "linear-gradient(135deg,#8d867c,#5f584f)",
+    afterGradient: "linear-gradient(135deg,#efe9e4,#d6a99a 55%,#c98f7c)",
+  },
+  {
+    title: "Encimera de porcelánico",
+    tagLine: "Encimeras de cocina · Porcelánico · Getafe",
+    beforeGradient: "linear-gradient(135deg,#9a948a,#665f55)",
+    afterGradient: "linear-gradient(135deg,#e9e5dd,#cec7ba 45%,#e2ddd2)",
+  },
+  {
+    title: "Reforma de baño",
+    tagLine: "Reforma de baño · Granito · Pozuelo de Alarcón",
+    beforeGradient: "linear-gradient(135deg,#8b8f92,#54585c)",
+    afterGradient: "linear-gradient(135deg,#dfe1e2,#9fa5aa 50%,#6f757a)",
+  },
+];
+
+const processSteps = [
+  { title: "Visita y presupuesto", description: "Valoramos tu espacio y te damos un presupuesto cerrado, sin sorpresas ni letra pequeña." },
+  { title: "Diseño y materiales", description: "Elegimos juntos el material y el diseño que mejor encajan con tu casa y tu presupuesto." },
+  { title: "Fabricación e instalación", description: "Fabricamos a medida en nuestro taller e instalamos con nuestro propio equipo." },
+  { title: "Entrega y garantía", description: "Revisamos cada detalle contigo y respondemos con garantía tras la instalación." },
+];
+
 export default function Home() {
   return (
-    <main className="flex flex-1 flex-col items-center justify-center gap-6 bg-base-50 px-6 py-24 text-center">
-      <Image src="/logo.webp" alt="La Reina de la Casa" width={220} height={47} priority />
-      <h1 className="font-serif text-3xl font-semibold text-ink-900 md:text-4xl">
-        Encimeras y reformas en Madrid
-      </h1>
-      <p className="max-w-md text-base text-ink-700">
-        Web en construcción — Fase 1 (setup técnico) completada.
-      </p>
+    <main className="flex-1">
+      <Hero
+        eyebrow="Encimeras y reformas en Madrid"
+        title="Cocinas y reformas que se notan en los detalles"
+        description="Fabricamos e instalamos encimeras de porcelánico, cuarzo compacto y granito, y llevamos tu reforma de cocina, baño o vivienda de principio a fin — desde el primer boceto hasta la última pieza."
+        primaryCta={{ label: "Pide presupuesto gratis", href: "/contacto" }}
+        secondaryCta={{ label: "Ver proyectos", href: "/proyectos" }}
+        note="Madrid capital y alrededores · Fabricación propia"
+      />
+
+      <section className="py-14 md:py-24">
+        <div className="mx-auto max-w-7xl px-4 md:px-8">
+          <div className="mb-10 flex flex-col gap-4 md:mb-12 md:flex-row md:items-end md:justify-between">
+            <div>
+              <p className="text-sm font-semibold uppercase tracking-wide text-accent-600">Qué hacemos</p>
+              <h2 className="mt-2.5 font-serif text-3xl font-semibold text-ink-900 md:text-4xl">Un equipo, todo el proceso</h2>
+            </div>
+            <p className="max-w-sm text-base leading-relaxed text-ink-700">
+              Del encimera suelta a la reforma integral: nos encargamos del diseño, la fabricación y la instalación.
+            </p>
+          </div>
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            {services.map((s) => (
+              <ServiceCard key={s.href} {...s} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="bg-base-100 py-14 md:py-24">
+        <div className="mx-auto max-w-7xl px-4 md:px-8">
+          <div className="mb-10 flex flex-col gap-4 md:mb-12 md:flex-row md:items-end md:justify-between">
+            <div>
+              <p className="text-sm font-semibold uppercase tracking-wide text-accent-600">Proyectos reales</p>
+              <h2 className="mt-2.5 font-serif text-3xl font-semibold text-ink-900 md:text-4xl">Proyectos que hablan por nosotros</h2>
+            </div>
+            <Link href="/proyectos" className="inline-flex items-center gap-1.5 text-sm font-semibold text-accent-600">
+              Ver todos los proyectos
+              <ArrowRightIcon className="h-4 w-4" />
+            </Link>
+          </div>
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+            {featuredProjects.map((p) => (
+              <ProjectCard key={p.title} {...p} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="py-14 md:py-24">
+        <div className="mx-auto max-w-7xl px-4 md:px-8">
+          <div className="mb-10 flex flex-col gap-4 md:mb-12 md:flex-row md:items-end md:justify-between">
+            <div>
+              <p className="text-sm font-semibold uppercase tracking-wide text-accent-600">Materiales</p>
+              <h2 className="mt-2.5 font-serif text-3xl font-semibold text-ink-900 md:text-4xl">Elige el material de tu encimera</h2>
+            </div>
+            <p className="max-w-sm text-base leading-relaxed text-ink-700">
+              Trabajamos directamente con fabricantes: te asesoramos sobre el material más adecuado para tu día a día.
+            </p>
+          </div>
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+            {materials.map((m) => (
+              <MaterialCard key={m.href} {...m} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="bg-base-100 py-14 md:py-24">
+        <div className="mx-auto max-w-7xl px-4 md:px-8">
+          <div className="mb-14">
+            <p className="text-sm font-semibold uppercase tracking-wide text-accent-600">Cómo trabajamos</p>
+            <h2 className="mt-2.5 font-serif text-3xl font-semibold text-ink-900 md:text-4xl">De la primera visita a la última pieza</h2>
+          </div>
+          <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
+            {processSteps.map((step, i) => (
+              <div key={step.title} className="flex flex-col gap-4">
+                <div className="flex h-12 w-12 items-center justify-center border border-accent-500 font-serif text-lg font-semibold text-accent-600">
+                  {i + 1}
+                </div>
+                <h3 className="font-sans text-xl font-semibold text-ink-900">{step.title}</h3>
+                <p className="text-base leading-relaxed text-ink-700">{step.description}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="bg-ink-900 py-14 md:py-20">
+        <div className="mx-auto flex max-w-7xl flex-col gap-8 px-4 md:flex-row md:items-center md:justify-between md:px-8">
+          <div>
+            <h2 className="font-serif text-3xl font-semibold text-white md:text-4xl">¿Nos cuentas tu proyecto?</h2>
+            <p className="mt-4 max-w-lg text-base leading-relaxed text-white/70">
+              Cuéntanos qué necesitas y te respondemos con un presupuesto sin compromiso.
+            </p>
+            <div className="mt-7 flex flex-wrap gap-7">
+              <a href="tel:+34900000000" className="flex items-center gap-2.5 text-[15px] font-semibold text-white">
+                <PhoneIcon className="h-5 w-5 text-brand-beige" />
+                [TELÉFONO]
+              </a>
+              <a href="mailto:info@lareinadelacasa.com" className="flex items-center gap-2.5 text-[15px] font-semibold text-white">
+                <MailIcon className="h-5 w-5 text-brand-beige" />
+                info@lareinadelacasa.com
+              </a>
+            </div>
+          </div>
+          <Link
+            href="/contacto"
+            className="flex h-12 shrink-0 items-center justify-center bg-accent-500 px-7 text-[15px] font-semibold text-base-50 transition hover:bg-accent-600"
+          >
+            Cuéntanos tu proyecto
+          </Link>
+        </div>
+      </section>
     </main>
   );
 }
