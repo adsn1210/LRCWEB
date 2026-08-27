@@ -10,3 +10,8 @@ export const leadSchema = z.object({
 });
 
 export type LeadInput = z.infer<typeof leadSchema>;
+
+export type SubmitLeadState = {
+  status: "idle" | "success" | "error";
+  message?: string;
+};
