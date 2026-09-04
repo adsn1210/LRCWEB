@@ -9,9 +9,8 @@ export const metadata: Metadata = {
 const h2 = "font-serif text-2xl font-semibold text-ink-900 mt-10 first:mt-0";
 const p = "mt-4 text-base leading-relaxed text-ink-700";
 
-// TODO: sustituir [RAZÓN SOCIAL], [NIF/CIF] y [DOMICILIO SOCIAL] por los datos fiscales reales de
-// LRC en cuanto los facilite el cliente (Docs/07-pendientes-lanzamiento.md sección 1.1). El resto
-// del contenido sigue la estructura estándar del RGPD — revisar con un asesor/gestor antes del
+// Datos fiscales reales (La Reina de la Casa Studio S.L., NIF B75576538) añadidos 2026-09-04.
+// El contenido sigue la estructura estándar del RGPD — revisar con un asesor/gestor antes del
 // lanzamiento definitivo, no sustituye asesoramiento legal profesional.
 export default function PoliticaDePrivacidadPage() {
   return (
@@ -31,13 +30,14 @@ export default function PoliticaDePrivacidadPage() {
           <h2 className={h2}>1. Responsable del tratamiento</h2>
           <ul className="mt-4 flex flex-col gap-2 text-base leading-relaxed text-ink-700">
             <li>
-              <strong className="text-ink-900">Titular:</strong> [RAZÓN SOCIAL]
+              <strong className="text-ink-900">Titular:</strong> La Reina de la Casa Studio S.L.
             </li>
             <li>
-              <strong className="text-ink-900">NIF/CIF:</strong> [NIF/CIF]
+              <strong className="text-ink-900">NIF/CIF:</strong> B75576538
             </li>
             <li>
-              <strong className="text-ink-900">Domicilio:</strong> [DOMICILIO SOCIAL]
+              <strong className="text-ink-900">Domicilio:</strong> Calle Hermosilla, 48, Planta 1, Puerta D, 28001
+              Madrid
             </li>
             <li>
               <strong className="text-ink-900">Email de contacto:</strong> info@lareinadelacasa.com

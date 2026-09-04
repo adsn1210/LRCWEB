@@ -9,10 +9,10 @@ export const metadata: Metadata = {
 const h2 = "font-serif text-2xl font-semibold text-ink-900 mt-10 first:mt-0";
 const p = "mt-4 text-base leading-relaxed text-ink-700";
 
-// TODO: sustituir [RAZÓN SOCIAL], [NIF/CIF], [DOMICILIO SOCIAL] y [DATOS REGISTRALES] por los
-// datos fiscales reales de LRC en cuanto los facilite el cliente (Docs/07-pendientes-lanzamiento.md
-// sección 1.1). El resto del contenido es texto legal estándar (LSSI-CE) — revisar con un
-// asesor/gestor antes del lanzamiento definitivo, no sustituye asesoramiento legal profesional.
+// Datos fiscales reales (La Reina de la Casa Studio S.L., NIF B75576538) añadidos 2026-09-04.
+// TODO: falta solo [DATOS REGISTRALES] (tomo/folio/hoja del Registro Mercantil) y [TELÉFONO]. El
+// resto del contenido es texto legal estándar (LSSI-CE) — revisar con un asesor/gestor antes del
+// lanzamiento definitivo, no sustituye asesoramiento legal profesional.
 export default function AvisoLegalPage() {
   return (
     <main className="flex-1">
@@ -35,16 +35,18 @@ export default function AvisoLegalPage() {
           </p>
           <ul className="mt-4 flex flex-col gap-2 text-base leading-relaxed text-ink-700">
             <li>
-              <strong className="text-ink-900">Titular:</strong> [RAZÓN SOCIAL]
+              <strong className="text-ink-900">Titular:</strong> La Reina de la Casa Studio S.L.
             </li>
             <li>
-              <strong className="text-ink-900">NIF/CIF:</strong> [NIF/CIF]
+              <strong className="text-ink-900">NIF/CIF:</strong> B75576538
             </li>
             <li>
-              <strong className="text-ink-900">Domicilio social:</strong> [DOMICILIO SOCIAL]
+              <strong className="text-ink-900">Domicilio social:</strong> Calle Hermosilla, 48, Planta 1, Puerta D,
+              28001 Madrid
             </li>
             <li>
-              <strong className="text-ink-900">Datos registrales:</strong> [DATOS REGISTRALES, si aplica]
+              <strong className="text-ink-900">Datos registrales:</strong> [DATOS REGISTRALES — tomo, folio, hoja
+              del Registro Mercantil, pendiente]
             </li>
             <li>
               <strong className="text-ink-900">Email de contacto:</strong> info@lareinadelacasa.com
@@ -57,7 +59,7 @@ export default function AvisoLegalPage() {
           <h2 className={h2}>2. Objeto y ámbito de aplicación</h2>
           <p className={p}>
             El presente aviso legal regula el uso del sitio web lareinadelacasa.com (en adelante, &quot;la web&quot;),
-            propiedad de [RAZÓN SOCIAL]. El acceso y uso de la web atribuye la condición de usuario e implica la
+            propiedad de La Reina de la Casa Studio S.L. El acceso y uso de la web atribuye la condición de usuario e implica la
             aceptación plena de las condiciones incluidas en este aviso legal.
           </p>
 
@@ -72,14 +74,14 @@ export default function AvisoLegalPage() {
           <h2 className={h2}>4. Propiedad intelectual e industrial</h2>
           <p className={p}>
             Todos los contenidos de la web (textos, fotografías, gráficos, imágenes, iconos, tecnología, software,
-            diseño gráfico y códigos fuente) son propiedad de [RAZÓN SOCIAL] o de terceros que han autorizado su
+            diseño gráfico y códigos fuente) son propiedad de La Reina de la Casa Studio S.L. o de terceros que han autorizado su
             uso, y están protegidos por la normativa de propiedad intelectual e industrial. Queda prohibida su
             reproducción, distribución o comunicación pública total o parcial sin autorización expresa.
           </p>
 
           <h2 className={h2}>5. Exclusión de responsabilidad</h2>
           <p className={p}>
-            [RAZÓN SOCIAL] no se hace responsable de los daños y perjuicios de cualquier naturaleza que pudieran
+            La Reina de la Casa Studio S.L. no se hace responsable de los daños y perjuicios de cualquier naturaleza que pudieran
             derivarse de la falta de disponibilidad o continuidad del funcionamiento de la web, ni de los que
             pudieran derivarse del uso ilícito, negligente, fraudulento o contrario al presente aviso legal.
           </p>
@@ -87,7 +89,7 @@ export default function AvisoLegalPage() {
           <h2 className={h2}>6. Legislación aplicable y jurisdicción</h2>
           <p className={p}>
             Las presentes condiciones se rigen por la legislación española. Para la resolución de cualquier
-            controversia que pudiera surgir del acceso o uso de la web, [RAZÓN SOCIAL] y el usuario se someten a
+            controversia que pudiera surgir del acceso o uso de la web, La Reina de la Casa Studio S.L. y el usuario se someten a
             los juzgados y tribunales que correspondan conforme a derecho.
           </p>
         </div>

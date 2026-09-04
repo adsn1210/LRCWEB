@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { ContactForm } from "@/components/forms/ContactForm";
 import { ClockIcon, MailIcon, PhoneIcon, PinIcon, WhatsAppIcon } from "@/components/ui/icons";
+import { WHATSAPP_URL } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Contacto | La Reina de la Casa",
@@ -33,7 +34,9 @@ export default function ContactoPage() {
                 [TELÉFONO]
               </a>
               <a
-                href="#"
+                href={WHATSAPP_URL}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="flex items-center gap-3 text-base font-semibold text-ink-900"
                 aria-label="Escríbenos por WhatsApp"
               >
