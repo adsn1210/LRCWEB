@@ -4,7 +4,9 @@ import { Hero } from "@/components/marketing/Hero";
 import { ServiceCard } from "@/components/marketing/ServiceCard";
 import { MaterialCard } from "@/components/marketing/MaterialCard";
 import { ProjectCard, type ProjectCardData } from "@/components/marketing/ProjectCard";
-import { ArrowRightIcon, BathIcon, CountertopIcon, HouseIcon, MailIcon, PhoneIcon, PotIcon } from "@/components/ui/icons";
+import { ProcessSteps } from "@/components/marketing/ProcessSteps";
+import { CtaBand } from "@/components/marketing/CtaBand";
+import { ArrowRightIcon, BathIcon, CountertopIcon, HouseIcon, PotIcon } from "@/components/ui/icons";
 
 export const metadata: Metadata = {
   title: "La Reina de la Casa | Encimeras y reformas en Madrid",
@@ -160,52 +162,14 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="bg-base-100 py-14 md:py-24">
-        <div className="mx-auto max-w-7xl px-4 md:px-8">
-          <div className="mb-14">
-            <p className="text-sm font-semibold uppercase tracking-wide text-accent-600">Cómo trabajamos</p>
-            <h2 className="mt-2.5 font-serif text-3xl font-semibold text-ink-900 md:text-4xl">De la primera visita a la última pieza</h2>
-          </div>
-          <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
-            {processSteps.map((step, i) => (
-              <div key={step.title} className="flex flex-col gap-4">
-                <div className="flex h-12 w-12 items-center justify-center border border-accent-500 font-serif text-lg font-semibold text-accent-600">
-                  {i + 1}
-                </div>
-                <h3 className="font-sans text-xl font-semibold text-ink-900">{step.title}</h3>
-                <p className="text-base leading-relaxed text-ink-700">{step.description}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      <ProcessSteps
+        className="bg-base-100"
+        eyebrow="Cómo trabajamos"
+        title="De la primera visita a la última pieza"
+        steps={processSteps}
+      />
 
-      <section className="bg-ink-900 py-14 md:py-20">
-        <div className="mx-auto flex max-w-7xl flex-col gap-8 px-4 md:flex-row md:items-center md:justify-between md:px-8">
-          <div>
-            <h2 className="font-serif text-3xl font-semibold text-white md:text-4xl">¿Nos cuentas tu proyecto?</h2>
-            <p className="mt-4 max-w-lg text-base leading-relaxed text-white/70">
-              Cuéntanos qué necesitas y te respondemos con un presupuesto sin compromiso.
-            </p>
-            <div className="mt-7 flex flex-wrap gap-7">
-              <a href="tel:+34900000000" className="flex items-center gap-2.5 text-[15px] font-semibold text-white">
-                <PhoneIcon className="h-5 w-5 text-brand-beige" />
-                [TELÉFONO]
-              </a>
-              <a href="mailto:info@lareinadelacasa.com" className="flex items-center gap-2.5 text-[15px] font-semibold text-white">
-                <MailIcon className="h-5 w-5 text-brand-beige" />
-                info@lareinadelacasa.com
-              </a>
-            </div>
-          </div>
-          <Link
-            href="/contacto"
-            className="flex h-12 shrink-0 items-center justify-center bg-accent-500 px-7 text-[15px] font-semibold text-base-50 transition hover:bg-accent-600"
-          >
-            Cuéntanos tu proyecto
-          </Link>
-        </div>
-      </section>
+      <CtaBand />
     </main>
   );
 }

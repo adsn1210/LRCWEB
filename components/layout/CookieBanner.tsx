@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useSyncExternalStore } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
 import Link from "next/link";
 import { XIcon } from "@/components/ui/icons";
 
@@ -69,6 +69,14 @@ export function CookieBanner() {
   const [view, setView] = useState<View>("banner");
   const [analytics, setAnalytics] = useState(false);
   const [marketing, setMarketing] = useState(false);
+
+  // Visitante recurrente con una decisión ya guardada: hay que reenviarla a Consent Mode en cada
+  // carga de página, porque GTM se carga de cero cada vez y arranca siempre en "denegado" hasta
+  // que alguien le diga lo contrario (ver app/layout.tsx). commit() solo cubre la decisión tomada
+  // en esta misma visita, no las de sesiones anteriores.
+  useEffect(() => {
+    if (storedConsent) pushConsentUpdate(storedConsent);
+  }, [storedConsent]);
 
   function commit(value: ConsentValue) {
     writeConsentCookie(value);

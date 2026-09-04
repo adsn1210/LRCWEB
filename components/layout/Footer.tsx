@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { CameraIcon, ChatIcon, MailIcon, MusicNoteIcon, PhoneIcon, PinIcon, PlayIcon } from "@/components/ui/icons";
+import { ManageCookiesButton } from "@/components/layout/ManageCookiesButton";
 
 const serviceLinks = [
   { label: "Encimeras de cocina", href: "/servicios/encimeras-de-cocina" },
@@ -88,6 +89,9 @@ export function Footer() {
                 {l.label}
               </Link>
             ))}
+            <ManageCookiesButton className="text-[13.5px] text-ink-700 underline hover:text-accent-600">
+              Configurar cookies
+            </ManageCookiesButton>
           </div>
         </div>
       </div>
