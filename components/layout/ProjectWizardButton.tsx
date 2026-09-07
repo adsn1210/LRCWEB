@@ -1,22 +1,58 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import { ProjectWizard } from "@/components/forms/ProjectWizard";
 import { trackEvent } from "@/lib/analytics";
 import { XIcon } from "@/components/ui/icons";
 
+const FOCUSABLE_SELECTOR = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
+
 export function ProjectWizardButton() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const triggerButtonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     if (!open) return;
+
+    const triggerButton = triggerButtonRef.current;
+
+    // Mueve el foco al botón de cerrar en cuanto se abre el modal.
+    closeButtonRef.current?.focus();
+
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setOpen(false);
+      if (event.key === "Escape") {
+        setOpen(false);
+        return;
+      }
+
+      if (event.key !== "Tab" || !dialogRef.current) return;
+
+      // Atrapa el foco dentro del modal mientras está abierto.
+      const focusable = dialogRef.current.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR);
+      if (focusable.length === 0) return;
+
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
     };
+
     window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+      // Devuelve el foco al botón que abrió el modal al cerrarlo.
+      triggerButton?.focus();
+    };
   }, [open]);
 
   if (pathname === "/contacto") return null;
@@ -24,6 +60,7 @@ export function ProjectWizardButton() {
   return (
     <>
       <button
+        ref={triggerButtonRef}
         type="button"
         onClick={() => {
           setOpen(true);
@@ -43,12 +80,14 @@ export function ProjectWizardButton() {
           className="fixed inset-0 z-[100] flex items-center justify-center bg-ink-900/60 p-4"
         >
           <div
+            ref={dialogRef}
             role="dialog"
             aria-modal="true"
             aria-label="Cuéntanos tu proyecto"
             className="relative max-h-[90vh] w-full max-w-lg overflow-y-auto bg-white p-6 md:p-8"
           >
             <button
+              ref={closeButtonRef}
               type="button"
               onClick={() => setOpen(false)}
               aria-label="Cerrar"
