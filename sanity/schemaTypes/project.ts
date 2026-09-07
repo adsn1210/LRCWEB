@@ -12,9 +12,19 @@ export default defineType({
     defineField({ name: "material", type: "reference", to: [{ type: "material" }] }),
     defineField({ name: "municipality", type: "string" }), // ej. "Alcorcón" — sin dirección exacta
     defineField({ name: "description", type: "text" }),
-    defineField({ name: "beforeImage", type: "image" }),
-    defineField({ name: "afterImage", type: "image" }),
-    defineField({ name: "gallery", type: "array", of: [{ type: "image" }] }),
+    defineField({
+      name: "beforeImage",
+      type: "image",
+      description: "Obligatoria: el proyecto no aparece en la web hasta tener foto de antes Y de después.",
+      options: { hotspot: true },
+    }),
+    defineField({
+      name: "afterImage",
+      type: "image",
+      description: "Obligatoria: el proyecto no aparece en la web hasta tener foto de antes Y de después.",
+      options: { hotspot: true },
+    }),
+    defineField({ name: "gallery", type: "array", of: [{ type: "image", options: { hotspot: true } }] }),
     defineField({ name: "featured", type: "boolean" }), // para destacar en home
   ],
 });

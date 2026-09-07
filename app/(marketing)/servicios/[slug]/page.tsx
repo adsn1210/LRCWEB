@@ -6,8 +6,10 @@ import { ProjectCard } from "@/components/marketing/ProjectCard";
 import { CtaBand } from "@/components/marketing/CtaBand";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { getServiceBySlug, services } from "@/lib/content/services";
-import { getProjectsByService, toProjectCardData } from "@/lib/placeholder-projects";
+import { getProjects, toProjectCardData } from "@/lib/sanity-projects";
 import { SITE_URL } from "@/lib/site";
+
+export const revalidate = 3600;
 
 export function generateStaticParams() {
   return services.map((s) => ({ slug: s.slug }));
@@ -28,7 +30,8 @@ export default async function ServicioPage({ params }: { params: Promise<{ slug:
   const service = getServiceBySlug(slug);
   if (!service) notFound();
 
-  const relatedProjects = getProjectsByService(service.slug);
+  const projects = await getProjects();
+  const relatedProjects = projects.filter((p) => p.serviceSlug === service.slug).slice(0, 3);
 
   const serviceJsonLd = {
     "@context": "https://schema.org",

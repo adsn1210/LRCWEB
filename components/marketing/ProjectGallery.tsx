@@ -2,13 +2,13 @@
 
 import { useMemo, useState } from "react";
 import { ProjectCard } from "@/components/marketing/ProjectCard";
-import { toProjectCardData, type PlaceholderProject } from "@/lib/placeholder-projects";
+import { toProjectCardData, type SanityProject } from "@/lib/sanity-projects";
 import type { MaterialSlug, ServiceSlug } from "@/lib/slugs";
 
 type Option<T extends string> = { slug: T; label: string };
 
 type ProjectGalleryProps = {
-  projects: PlaceholderProject[];
+  projects: SanityProject[];
   serviceOptions: Option<ServiceSlug>[];
   materialOptions: Option<MaterialSlug>[];
 };

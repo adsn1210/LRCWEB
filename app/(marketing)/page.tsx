@@ -5,7 +5,8 @@ import { sanityClient, urlFor } from "@/lib/sanity";
 import { Hero } from "@/components/marketing/Hero";
 import { ServiceCard } from "@/components/marketing/ServiceCard";
 import { MaterialCard } from "@/components/marketing/MaterialCard";
-import { ProjectCard, type ProjectCardData } from "@/components/marketing/ProjectCard";
+import { ProjectCard } from "@/components/marketing/ProjectCard";
+import { getProjects, toProjectCardData } from "@/lib/sanity-projects";
 import { ProcessSteps } from "@/components/marketing/ProcessSteps";
 import { CtaBand } from "@/components/marketing/CtaBand";
 import { ArrowRightIcon, BathIcon, CountertopIcon, HouseIcon, PotIcon } from "@/components/ui/icons";
@@ -69,29 +70,6 @@ const materials = [
   },
 ];
 
-// TODO: sustituir por proyectos reales desde Sanity (documento `project`, featured=true) en cuanto
-// LRC facilite fotografías; de momento se muestran con degradados de textura como placeholder.
-const featuredProjects: ProjectCardData[] = [
-  {
-    title: "Reforma de cocina",
-    tagLine: "Reforma de cocina · Cuarzo compacto · Alcorcón",
-    beforeGradient: "linear-gradient(135deg,#8d867c,#5f584f)",
-    afterGradient: "linear-gradient(135deg,#efe9e4,#d6a99a 55%,#c98f7c)",
-  },
-  {
-    title: "Encimera de porcelánico",
-    tagLine: "Encimeras de cocina · Porcelánico · Getafe",
-    beforeGradient: "linear-gradient(135deg,#9a948a,#665f55)",
-    afterGradient: "linear-gradient(135deg,#e9e5dd,#cec7ba 45%,#e2ddd2)",
-  },
-  {
-    title: "Reforma de baño",
-    tagLine: "Reforma de baño · Granito · Pozuelo de Alarcón",
-    beforeGradient: "linear-gradient(135deg,#8b8f92,#54585c)",
-    afterGradient: "linear-gradient(135deg,#dfe1e2,#9fa5aa 50%,#6f757a)",
-  },
-];
-
 const processSteps = [
   { title: "Visita y presupuesto", description: "Valoramos tu espacio y te damos un presupuesto cerrado, sin sorpresas ni letra pequeña." },
   { title: "Diseño y materiales", description: "Elegimos juntos el material y el diseño que mejor encajan con tu casa y tu presupuesto." },
@@ -99,9 +77,10 @@ const processSteps = [
   { title: "Entrega y garantía", description: "Revisamos cada detalle contigo y respondemos con garantía tras la instalación." },
 ];
 
-// El resto de esta página sigue con contenido de ejemplo (ver TODOs más abajo); esta es la primera
-// pieza que lee un documento real de Sanity. Si Sanity no responde (config pendiente, red, etc.),
-// no debe romper la home: se sigue mostrando el degradado decorativo de Hero.tsx.
+// Servicios y materiales de esta página siguen con contenido de ejemplo hardcodeado (ver
+// lib/content/); solo la imagen del Hero y los proyectos destacados leen Sanity ya. Si Sanity no
+// responde (config pendiente, red, etc.), no debe romper la home: se sigue mostrando el degradado
+// decorativo de Hero.tsx.
 async function getHeroImageUrl(): Promise<string | undefined> {
   try {
     const settings = await sanityClient.fetch<{ heroImage?: SanityImageSource } | null>(
@@ -116,7 +95,8 @@ async function getHeroImageUrl(): Promise<string | undefined> {
 }
 
 export default async function Home() {
-  const heroImageUrl = await getHeroImageUrl();
+  const [heroImageUrl, projects] = await Promise.all([getHeroImageUrl(), getProjects()]);
+  const featuredProjects = projects.filter((p) => p.featured).slice(0, 3);
 
   return (
     <main className="flex-1">
@@ -149,25 +129,27 @@ export default async function Home() {
         </div>
       </section>
 
-      <section className="bg-base-100 py-14 md:py-24">
-        <div className="mx-auto max-w-7xl px-4 md:px-8">
-          <div className="mb-10 flex flex-col gap-4 md:mb-12 md:flex-row md:items-end md:justify-between">
-            <div>
-              <p className="text-sm font-semibold uppercase tracking-wide text-accent-600">Proyectos reales</p>
-              <h2 className="mt-2.5 font-serif text-3xl font-semibold text-ink-900 md:text-4xl">Proyectos que hablan por nosotros</h2>
+      {featuredProjects.length > 0 && (
+        <section className="bg-base-100 py-14 md:py-24">
+          <div className="mx-auto max-w-7xl px-4 md:px-8">
+            <div className="mb-10 flex flex-col gap-4 md:mb-12 md:flex-row md:items-end md:justify-between">
+              <div>
+                <p className="text-sm font-semibold uppercase tracking-wide text-accent-600">Proyectos reales</p>
+                <h2 className="mt-2.5 font-serif text-3xl font-semibold text-ink-900 md:text-4xl">Proyectos que hablan por nosotros</h2>
+              </div>
+              <Link href="/proyectos" className="inline-flex items-center gap-1.5 text-sm font-semibold text-accent-600">
+                Ver todos los proyectos
+                <ArrowRightIcon className="h-4 w-4" />
+              </Link>
             </div>
-            <Link href="/proyectos" className="inline-flex items-center gap-1.5 text-sm font-semibold text-accent-600">
-              Ver todos los proyectos
-              <ArrowRightIcon className="h-4 w-4" />
-            </Link>
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+              {featuredProjects.map((p) => (
+                <ProjectCard key={p.id} {...toProjectCardData(p)} />
+              ))}
+            </div>
           </div>
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-            {featuredProjects.map((p) => (
-              <ProjectCard key={p.title} {...p} />
-            ))}
-          </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       <section className="py-14 md:py-24">
         <div className="mx-auto max-w-7xl px-4 md:px-8">

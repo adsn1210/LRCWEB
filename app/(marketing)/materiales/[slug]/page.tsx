@@ -5,7 +5,9 @@ import { ProjectCard } from "@/components/marketing/ProjectCard";
 import { CtaBand } from "@/components/marketing/CtaBand";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { getMaterialBySlug, materials } from "@/lib/content/materials";
-import { getProjectsByMaterial, toProjectCardData } from "@/lib/placeholder-projects";
+import { getProjects, toProjectCardData } from "@/lib/sanity-projects";
+
+export const revalidate = 3600;
 
 export function generateStaticParams() {
   return materials.map((m) => ({ slug: m.slug }));
@@ -26,7 +28,8 @@ export default async function MaterialPage({ params }: { params: Promise<{ slug:
   const material = getMaterialBySlug(slug);
   if (!material) notFound();
 
-  const relatedProjects = getProjectsByMaterial(material.slug);
+  const projects = await getProjects();
+  const relatedProjects = projects.filter((p) => p.materialSlug === material.slug).slice(0, 3);
 
   return (
     <main className="flex-1">

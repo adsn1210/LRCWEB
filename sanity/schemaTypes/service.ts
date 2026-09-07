@@ -8,7 +8,15 @@ export default defineType({
   type: "document",
   fields: [
     defineField({ name: "title", type: "string" }),
-    defineField({ name: "slug", type: "slug", options: { source: "title" } }),
+    defineField({
+      name: "slug",
+      type: "slug",
+      description:
+        "Escríbelo a mano, no uses «Generate»: tiene que ser exactamente uno de estos 4 valores " +
+        "(el título no siempre coincide con el slug que espera la web): encimeras-de-cocina, " +
+        "reformas-de-cocina, reformas-de-bano, reformas-integrales.",
+      options: { source: "title" },
+    }),
     defineField({ name: "description", type: "text" }),
     defineField({ name: "process", type: "array", of: [{ type: "block" }] }),
   ],
