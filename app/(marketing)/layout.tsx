@@ -2,6 +2,7 @@ import Script from "next/script";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { WhatsAppButton } from "@/components/layout/WhatsAppButton";
+import { ProjectWizardButton } from "@/components/layout/ProjectWizardButton";
 import { CookieBanner } from "@/components/layout/CookieBanner";
 import { SITE_URL } from "@/lib/site";
 
@@ -50,6 +51,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       {children}
       <Footer />
       <WhatsAppButton />
+      <ProjectWizardButton />
       <CookieBanner />
     </>
   );
