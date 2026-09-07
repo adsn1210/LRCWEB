@@ -145,9 +145,9 @@ export function ProjectWizard({ sourcePage }: ProjectWizardProps) {
           {projectOptions.map((option) => (
             <label
               key={option.value}
-              className="flex cursor-pointer flex-col overflow-hidden border border-base-200 transition hover:border-accent-500 has-[:checked]:border-accent-500 has-[:checked]:ring-2 has-[:checked]:ring-accent-500 peer-focus-visible:ring-2 peer-focus-visible:ring-accent-500 peer-focus-visible:ring-offset-2"
+              className="flex cursor-pointer flex-col overflow-hidden border border-base-200 transition hover:border-accent-500 has-[:checked]:border-accent-500 has-[:checked]:ring-2 has-[:checked]:ring-accent-500 has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-accent-500 has-[:focus-visible]:ring-offset-2"
             >
-              <input type="radio" name="service" value={option.value} required className="peer sr-only" />
+              <input type="radio" name="service" value={option.value} required className="sr-only" />
               <span className={`flex h-20 items-center justify-center text-white ${option.tone}`}>
                 <option.icon className="h-8 w-8" />
               </span>
@@ -184,9 +184,9 @@ export function ProjectWizard({ sourcePage }: ProjectWizardProps) {
             {urgencyOptions.map((option) => (
               <label
                 key={option.value}
-                className={`flex min-h-11 flex-1 cursor-pointer items-center justify-center border px-3 py-2.5 text-center text-sm font-semibold transition peer-focus-visible:ring-2 peer-focus-visible:ring-accent-500 peer-focus-visible:ring-offset-2 ${option.tone}`}
+                className={`flex min-h-11 flex-1 cursor-pointer items-center justify-center border px-3 py-2.5 text-center text-sm font-semibold transition has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-accent-500 has-[:focus-visible]:ring-offset-2 ${option.tone}`}
               >
-                <input type="radio" name="urgency" value={option.value} required className="peer sr-only" />
+                <input type="radio" name="urgency" value={option.value} required className="sr-only" />
                 {option.label}
               </label>
             ))}

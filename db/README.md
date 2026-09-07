@@ -11,3 +11,8 @@ exists`, así que no toca una tabla que ya existe). Para aplicar un cambio de es
 proyecto Supabase real que ya tiene datos, se añade un archivo numerado en `migrations/` con las
 sentencias `alter table` necesarias, y se ejecuta a mano en el SQL Editor de Supabase — no hay
 herramienta de migraciones automática en este proyecto.
+
+**Importante para esta migración concreta:** el código de esta rama inserta `budget`/`urgency`
+sin comprobar si existen — hay que aplicar `0001_add_budget_urgency.sql` en producción **antes**
+de desplegar este código, no después. Si se despliega primero, todos los envíos de lead (incluido
+el formulario ya existente en `/contacto`) fallarán hasta que se aplique la migración.
