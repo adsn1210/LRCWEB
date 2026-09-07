@@ -29,7 +29,7 @@ export function ProjectWizardButton() {
           setOpen(true);
           trackEvent("lead_widget_open");
         }}
-        className="fixed left-6 top-[55%] z-[90] flex h-14 items-center justify-center bg-accent-500 px-6 text-center text-[15px] font-semibold text-base-50 shadow-lg shadow-accent-500/30 transition hover:bg-accent-600"
+        className="fixed left-6 top-[55%] z-[90] flex h-14 items-center justify-center bg-accent-500 px-6 text-center text-[15px] font-semibold text-base-50 shadow-lg shadow-accent-500/30 transition hover:bg-accent-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500 focus-visible:ring-offset-2"
       >
         Cuéntanos tu proyecto
       </button>
@@ -52,7 +52,7 @@ export function ProjectWizardButton() {
               type="button"
               onClick={() => setOpen(false)}
               aria-label="Cerrar"
-              className="absolute right-4 top-4 flex h-11 w-11 items-center justify-center text-ink-700 hover:text-ink-900"
+              className="absolute right-4 top-4 flex h-11 w-11 items-center justify-center text-ink-700 hover:text-ink-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500"
             >
               <XIcon className="h-5 w-5" />
             </button>
