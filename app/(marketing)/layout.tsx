@@ -4,19 +4,19 @@ import { Footer } from "@/components/layout/Footer";
 import { WhatsAppButton } from "@/components/layout/WhatsAppButton";
 import { ProjectWizardButton } from "@/components/layout/ProjectWizardButton";
 import { CookieBanner } from "@/components/layout/CookieBanner";
-import { SITE_URL } from "@/lib/site";
+import { PHONE_NUMBER_TEL, SITE_URL } from "@/lib/site";
 
 const GTM_ID = process.env.NEXT_PUBLIC_GTM_ID;
 
-// JSON-LD LocalBusiness (Docs/BACKEND.md sección 5). TODO: añadir teléfono real y dirección
-// completa (address/geo) en cuanto LRC facilite los datos del showroom.
+// JSON-LD LocalBusiness (Docs/BACKEND.md sección 5). TODO: añadir dirección completa (address/geo)
+// en cuanto LRC facilite los datos del showroom.
 const localBusinessJsonLd = {
   "@context": "https://schema.org",
   "@type": "HomeAndConstructionBusiness",
   name: "La Reina de la Casa",
   url: SITE_URL,
   image: `${SITE_URL}/logo.webp`,
-  telephone: "+34900000000",
+  telephone: PHONE_NUMBER_TEL,
   areaServed: "Comunidad de Madrid",
   priceRange: "$$",
 };

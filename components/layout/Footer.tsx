@@ -2,6 +2,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { CameraIcon, ChatIcon, MailIcon, MusicNoteIcon, PhoneIcon, PinIcon, PlayIcon } from "@/components/ui/icons";
 import { ManageCookiesButton } from "@/components/layout/ManageCookiesButton";
+import { PhoneMenu } from "@/components/ui/PhoneMenu";
+import { PHONE_NUMBER_DISPLAY } from "@/lib/site";
 
 const serviceLinks = [
   { label: "Encimeras de cocina", href: "/servicios/encimeras-de-cocina" },
@@ -69,10 +71,10 @@ export function Footer() {
                 <PinIcon className="mt-0.5 h-4 w-4 shrink-0 text-accent-600" />
                 [Dirección showroom], Madrid
               </p>
-              <a href="tel:+34900000000" className="flex items-center gap-2.5 text-sm text-ink-700">
+              <PhoneMenu className="flex items-center gap-2.5 text-sm text-ink-700">
                 <PhoneIcon className="h-4 w-4 shrink-0 text-accent-600" />
-                [TELÉFONO]
-              </a>
+                {PHONE_NUMBER_DISPLAY}
+              </PhoneMenu>
               <a href="mailto:info@lareinadelacasa.com" className="flex items-center gap-2.5 text-sm text-ink-700">
                 <MailIcon className="h-4 w-4 shrink-0 text-accent-600" />
                 info@lareinadelacasa.com

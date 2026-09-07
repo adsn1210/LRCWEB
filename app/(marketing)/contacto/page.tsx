@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { ProjectWizard } from "@/components/forms/ProjectWizard";
 import { ClockIcon, MailIcon, PhoneIcon, PinIcon, WhatsAppIcon } from "@/components/ui/icons";
-import { WHATSAPP_URL } from "@/lib/site";
+import { PhoneMenu } from "@/components/ui/PhoneMenu";
+import { PHONE_NUMBER_DISPLAY, WHATSAPP_URL } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Contacto | La Reina de la Casa",
@@ -29,10 +30,10 @@ export default function ContactoPage() {
 
           <div className="flex flex-col gap-8">
             <div className="flex flex-col gap-5">
-              <a href="tel:+34900000000" className="flex items-center gap-3 text-base font-semibold text-ink-900">
+              <PhoneMenu className="flex items-center gap-3 text-base font-semibold text-ink-900">
                 <PhoneIcon className="h-5 w-5 text-accent-600" />
-                [TELÉFONO]
-              </a>
+                {PHONE_NUMBER_DISPLAY}
+              </PhoneMenu>
               <a
                 href={WHATSAPP_URL}
                 target="_blank"

@@ -1,6 +1,8 @@
 import Link from "next/link";
 import Image from "next/image";
 import { ChevronDownIcon, PhoneIcon } from "@/components/ui/icons";
+import { PhoneMenu } from "@/components/ui/PhoneMenu";
+import { PHONE_NUMBER_DISPLAY } from "@/lib/site";
 import { MobileMenu } from "./MobileMenu";
 
 const services = [
@@ -39,10 +41,10 @@ export function Header() {
         </nav>
 
         <div className="hidden md:flex">
-          <a href="tel:+34900000000" className="flex items-center gap-2 text-[15px] font-semibold text-ink-900">
+          <PhoneMenu className="flex items-center gap-2 text-[15px] font-semibold text-ink-900">
             <PhoneIcon className="h-5 w-5 text-accent-600" />
-            [TELÉFONO]
-          </a>
+            {PHONE_NUMBER_DISPLAY}
+          </PhoneMenu>
         </div>
 
         <MobileMenu services={services} materials={materials} />

@@ -7,3 +7,9 @@ export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://lareinadela
 export const WHATSAPP_URL = `https://wa.me/34602023456?text=${encodeURIComponent(
   "Hola, me gustaría pedir información sobre una encimera o reforma.",
 )}`;
+
+// Mismo número que WhatsApp (+34 602 02 34 56), confirmado 2026-09-07 — LRC solo tiene una línea
+// para ambos canales. Fuente única para que los enlaces de teléfono del sitio (PhoneMenu, JSON-LD,
+// aviso legal) no puedan desincronizarse entre sí ni del número de WhatsApp de arriba.
+export const PHONE_NUMBER_DISPLAY = "+34 602 02 34 56";
+export const PHONE_NUMBER_TEL = "+34602023456";

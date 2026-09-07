@@ -5,6 +5,8 @@ import { createPortal } from "react-dom";
 import Link from "next/link";
 import Image from "next/image";
 import { ChevronDownIcon, MenuIcon, PhoneIcon, XIcon } from "@/components/ui/icons";
+import { PhoneMenu } from "@/components/ui/PhoneMenu";
+import { PHONE_NUMBER_DISPLAY } from "@/lib/site";
 
 type NavItem = { label: string; href: string };
 
@@ -75,13 +77,10 @@ export function MobileMenu({ services, materials }: MobileMenuProps) {
           </div>
 
           <div className="border-t border-base-200 p-5">
-            <a
-              href="tel:+34900000000"
-              className="flex h-[50px] items-center justify-center gap-2 border border-ink-900 text-[15px] font-semibold text-ink-900"
-            >
+            <PhoneMenu className="flex h-[50px] w-full items-center justify-center gap-2 border border-ink-900 text-[15px] font-semibold text-ink-900">
               <PhoneIcon className="h-5 w-5" />
-              [TELÉFONO]
-            </a>
+              {PHONE_NUMBER_DISPLAY}
+            </PhoneMenu>
           </div>
           </div>,
           document.body,

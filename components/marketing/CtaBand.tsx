@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { MailIcon, PhoneIcon } from "@/components/ui/icons";
+import { PhoneMenu } from "@/components/ui/PhoneMenu";
+import { PHONE_NUMBER_DISPLAY } from "@/lib/site";
 
 type CtaBandProps = {
   title?: string;
@@ -20,10 +22,10 @@ export function CtaBand({
           <h2 className="font-serif text-3xl font-semibold text-white md:text-4xl">{title}</h2>
           <p className="mt-4 max-w-lg text-base leading-relaxed text-white/70">{description}</p>
           <div className="mt-7 flex flex-wrap gap-7">
-            <a href="tel:+34900000000" className="flex items-center gap-2.5 text-[15px] font-semibold text-white">
+            <PhoneMenu className="flex items-center gap-2.5 text-[15px] font-semibold text-white">
               <PhoneIcon className="h-5 w-5 text-brand-beige" />
-              [TELÉFONO]
-            </a>
+              {PHONE_NUMBER_DISPLAY}
+            </PhoneMenu>
             <a href="mailto:info@lareinadelacasa.com" className="flex items-center gap-2.5 text-[15px] font-semibold text-white">
               <MailIcon className="h-5 w-5 text-brand-beige" />
               info@lareinadelacasa.com

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
+import { PHONE_NUMBER_DISPLAY } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Aviso legal | La Reina de la Casa",
@@ -10,9 +11,9 @@ const h2 = "font-serif text-2xl font-semibold text-ink-900 mt-10 first:mt-0";
 const p = "mt-4 text-base leading-relaxed text-ink-700";
 
 // Datos fiscales reales (La Reina de la Casa Studio S.L., NIF B75576538) añadidos 2026-09-04.
-// TODO: falta solo [DATOS REGISTRALES] (tomo/folio/hoja del Registro Mercantil) y [TELÉFONO]. El
-// resto del contenido es texto legal estándar (LSSI-CE) — revisar con un asesor/gestor antes del
-// lanzamiento definitivo, no sustituye asesoramiento legal profesional.
+// TODO: falta solo [DATOS REGISTRALES] (tomo/folio/hoja del Registro Mercantil). El resto del
+// contenido es texto legal estándar (LSSI-CE) — revisar con un asesor/gestor antes del lanzamiento
+// definitivo, no sustituye asesoramiento legal profesional.
 export default function AvisoLegalPage() {
   return (
     <main className="flex-1">
@@ -52,7 +53,7 @@ export default function AvisoLegalPage() {
               <strong className="text-ink-900">Email de contacto:</strong> info@lareinadelacasa.com
             </li>
             <li>
-              <strong className="text-ink-900">Teléfono:</strong> [TELÉFONO]
+              <strong className="text-ink-900">Teléfono:</strong> {PHONE_NUMBER_DISPLAY}
             </li>
           </ul>
 
