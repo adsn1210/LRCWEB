@@ -8,5 +8,7 @@ create table if not exists leads (
   contact      text not null, -- teléfono o email
   service      text not null check (service in ('encimeras', 'reforma-cocina', 'reforma-bano', 'reforma-integral', 'otro')),
   message      text,
-  source_page  text
+  source_page  text,
+  budget       integer,
+  urgency      text check (urgency in ('mas-3-meses', 'menos-3-meses', 'lo-antes-posible'))
 );
