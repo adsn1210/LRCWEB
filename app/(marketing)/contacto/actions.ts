@@ -13,7 +13,11 @@ export async function submitLead(_prevState: SubmitLeadState, formData: FormData
     service: formData.get("service"),
     message: formData.get("message") || undefined,
     honeypot: formData.get("honeypot") ?? "",
+    budget: formData.get("budget") || undefined,
+    urgency: formData.get("urgency") || undefined,
   };
+
+  const sourcePage = (formData.get("source_page") as string) || "/contacto";
 
   const parsed = leadSchema.safeParse(raw);
 
@@ -33,12 +37,12 @@ export async function submitLead(_prevState: SubmitLeadState, formData: FormData
     return { status: "error", message: "Demasiadas solicitudes seguidas. Inténtalo de nuevo en unos minutos." };
   }
 
-  const { name, phoneOrEmail, service, message } = parsed.data;
+  const { name, phoneOrEmail, service, message, budget, urgency } = parsed.data;
 
   try {
     await db`
-      insert into leads (name, contact, service, message, source_page)
-      values (${name}, ${phoneOrEmail}, ${service}, ${message ?? null}, '/contacto')
+      insert into leads (name, contact, service, message, source_page, budget, urgency)
+      values (${name}, ${phoneOrEmail}, ${service}, ${message ?? null}, ${sourcePage}, ${budget ?? null}, ${urgency ?? null})
     `;
   } catch (error) {
     console.error("[contacto] error guardando el lead en Supabase", error);
@@ -55,7 +59,9 @@ export async function submitLead(_prevState: SubmitLeadState, formData: FormData
         to: process.env.LEAD_NOTIFICATION_EMAIL || "info@lareinadelacasa.com",
         replyTo: phoneOrEmail.includes("@") ? phoneOrEmail : undefined,
         subject: `Nuevo lead desde la web: ${name}`,
-        text: `Nombre: ${name}\nContacto: ${phoneOrEmail}\nServicio: ${service}\nMensaje: ${message ?? "(sin mensaje)"}`,
+        text: `Nombre: ${name}\nContacto: ${phoneOrEmail}\nServicio: ${service}\nPresupuesto: ${
+          budget ? `${budget}€` : "(no indicado)"
+        }\nUrgencia: ${urgency ?? "(no indicada)"}\nMensaje: ${message ?? "(sin mensaje)"}`,
       });
     } catch (error) {
       // El lead ya está guardado en Supabase aunque el email falle: no rompemos la respuesta al usuario.
