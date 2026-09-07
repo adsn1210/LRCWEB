@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { PinIcon } from "@/components/ui/icons";
 
@@ -10,19 +11,26 @@ type HeroProps = {
   primaryCta: HeroCta;
   secondaryCta?: HeroCta;
   note?: string;
+  imageUrl?: string;
 };
 
-export function Hero({ eyebrow, title, description, primaryCta, secondaryCta, note }: HeroProps) {
+export function Hero({ eyebrow, title, description, primaryCta, secondaryCta, note, imageUrl }: HeroProps) {
   return (
     <section className="relative overflow-hidden bg-gradient-to-br from-[#2b2621] via-[#423a32] to-[#59493c] py-20 md:py-32">
-      {/* TODO: reemplazar por foto real de proyecto cuando LRC facilite fotografía profesional */}
+      {imageUrl && <Image src={imageUrl} alt="" fill priority sizes="100vw" className="object-cover" />}
+      {/* Sin imagen (aún no subida en Sanity → "Ajustes del sitio"): degradado decorativo. Con
+          imagen: capa oscura encima para que el texto blanco se siga leyendo bien. */}
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0"
-        style={{
-          background:
-            "radial-gradient(1100px 600px at 15% 20%, rgba(214,169,154,.45), transparent 60%), radial-gradient(900px 700px at 85% 85%, rgba(159,165,170,.4), transparent 60%)",
-        }}
+        style={
+          imageUrl
+            ? { background: "linear-gradient(115deg, rgba(34,31,27,.88), rgba(34,31,27,.55) 55%, rgba(34,31,27,.35))" }
+            : {
+                background:
+                  "radial-gradient(1100px 600px at 15% 20%, rgba(214,169,154,.45), transparent 60%), radial-gradient(900px 700px at 85% 85%, rgba(159,165,170,.4), transparent 60%)",
+              }
+        }
       />
       <div className="relative mx-auto max-w-7xl px-4 md:px-8">
         <div className="max-w-xl">

@@ -1,4 +1,5 @@
 import { createClient } from "@sanity/client";
+import { createImageUrlBuilder, type SanityImageSource } from "@sanity/image-url";
 
 // Ver Docs/BACKEND.md secciones 2-3. Variables en .env.local (plantilla: .env.example).
 export const sanityClient = createClient({
@@ -8,3 +9,11 @@ export const sanityClient = createClient({
   token: process.env.SANITY_API_READ_TOKEN,
   useCdn: true,
 });
+
+const imageBuilder = createImageUrlBuilder(sanityClient);
+
+// Construye la URL de una imagen de Sanity (p. ej. `siteSettings.heroImage`). Ver
+// https://www.sanity.io/docs/image-url
+export function urlFor(source: SanityImageSource) {
+  return imageBuilder.image(source);
+}

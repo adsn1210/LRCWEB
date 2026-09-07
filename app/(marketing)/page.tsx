@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import type { SanityImageSource } from "@sanity/image-url";
+import { sanityClient, urlFor } from "@/lib/sanity";
 import { Hero } from "@/components/marketing/Hero";
 import { ServiceCard } from "@/components/marketing/ServiceCard";
 import { MaterialCard } from "@/components/marketing/MaterialCard";
@@ -13,6 +15,11 @@ export const metadata: Metadata = {
   description:
     "Encimeras de cocina (porcelánico, cuarzo compacto, granito), muebles a medida y reformas integrales de cocina, baño y vivienda en Madrid.",
 };
+
+// La home ahora lee siteSettings.heroImage de Sanity (ver getHeroImageUrl más abajo); sin
+// revalidate quedaría fija en el contenido del build. Mismo intervalo que las páginas de
+// servicio/material (Docs/BACKEND.md sección 5).
+export const revalidate = 3600;
 
 const services = [
   {
@@ -92,7 +99,25 @@ const processSteps = [
   { title: "Entrega y garantía", description: "Revisamos cada detalle contigo y respondemos con garantía tras la instalación." },
 ];
 
-export default function Home() {
+// El resto de esta página sigue con contenido de ejemplo (ver TODOs más abajo); esta es la primera
+// pieza que lee un documento real de Sanity. Si Sanity no responde (config pendiente, red, etc.),
+// no debe romper la home: se sigue mostrando el degradado decorativo de Hero.tsx.
+async function getHeroImageUrl(): Promise<string | undefined> {
+  try {
+    const settings = await sanityClient.fetch<{ heroImage?: SanityImageSource } | null>(
+      `*[_type == "siteSettings"][0]{ heroImage }`,
+    );
+    if (!settings?.heroImage) return undefined;
+    return urlFor(settings.heroImage).width(1600).height(900).fit("crop").url();
+  } catch (error) {
+    console.error("[home] error obteniendo siteSettings de Sanity", error);
+    return undefined;
+  }
+}
+
+export default async function Home() {
+  const heroImageUrl = await getHeroImageUrl();
+
   return (
     <main className="flex-1">
       <Hero
@@ -102,6 +127,7 @@ export default function Home() {
         primaryCta={{ label: "Pide presupuesto gratis", href: "/contacto" }}
         secondaryCta={{ label: "Ver proyectos", href: "/proyectos" }}
         note="Madrid capital y alrededores · Fabricación propia"
+        imageUrl={heroImageUrl}
       />
 
       <section className="py-14 md:py-24">
