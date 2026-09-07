@@ -51,8 +51,8 @@ export async function submitLead(_prevState: SubmitLeadState, formData: FormData
   if (resend) {
     try {
       await resend.emails.send({
-        from: process.env.RESEND_FROM_EMAIL ?? "LRC Web <notificaciones@contact.lareinadelacasa.com>",
-        to: process.env.LEAD_NOTIFICATION_EMAIL ?? "info@lareinadelacasa.com",
+        from: process.env.RESEND_FROM_EMAIL || "LRC Web <notificaciones@contact.lareinadelacasa.com>",
+        to: process.env.LEAD_NOTIFICATION_EMAIL || "info@lareinadelacasa.com",
         replyTo: phoneOrEmail.includes("@") ? phoneOrEmail : undefined,
         subject: `Nuevo lead desde la web: ${name}`,
         text: `Nombre: ${name}\nContacto: ${phoneOrEmail}\nServicio: ${service}\nMensaje: ${message ?? "(sin mensaje)"}`,
