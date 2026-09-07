@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { ContactForm } from "@/components/forms/ContactForm";
+import { ProjectWizard } from "@/components/forms/ProjectWizard";
 import { ClockIcon, MailIcon, PhoneIcon, PinIcon, WhatsAppIcon } from "@/components/ui/icons";
 import { WHATSAPP_URL } from "@/lib/site";
 
@@ -25,7 +25,7 @@ export default function ContactoPage() {
 
       <section className="py-14 md:py-24">
         <div className="mx-auto grid max-w-7xl grid-cols-1 gap-12 px-4 md:grid-cols-2 md:px-8">
-          <ContactForm />
+          <ProjectWizard sourcePage="/contacto" />
 
           <div className="flex flex-col gap-8">
             <div className="flex flex-col gap-5">
