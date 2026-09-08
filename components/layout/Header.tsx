@@ -41,7 +41,7 @@ export function Header() {
         </nav>
 
         <div className="hidden md:flex">
-          <PhoneMenu className="flex items-center gap-2 text-[15px] font-semibold text-ink-900">
+          <PhoneMenu source="header" className="flex items-center gap-2 text-[15px] font-semibold text-ink-900">
             <PhoneIcon className="h-5 w-5 text-accent-600" />
             {PHONE_NUMBER_DISPLAY}
           </PhoneMenu>

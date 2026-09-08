@@ -77,7 +77,7 @@ export function MobileMenu({ services, materials }: MobileMenuProps) {
           </div>
 
           <div className="border-t border-base-200 p-5">
-            <PhoneMenu className="flex h-[50px] w-full items-center justify-center gap-2 border border-ink-900 text-[15px] font-semibold text-ink-900">
+            <PhoneMenu source="mobile_menu" className="flex h-[50px] w-full items-center justify-center gap-2 border border-ink-900 text-[15px] font-semibold text-ink-900">
               <PhoneIcon className="h-5 w-5" />
               {PHONE_NUMBER_DISPLAY}
             </PhoneMenu>

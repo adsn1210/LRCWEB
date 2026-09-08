@@ -45,9 +45,14 @@ corregido con un `useEffect` que sincroniza el consentimiento guardado en cada c
 `NEXT_PUBLIC_GTM_ID="GTM-TZFP4VBC"` al final de `.env.local`, y la misma variable en Vercel cuando
 se despliegue (ver `Docs/08-conexion-supabase-sanity-vercel.md`).
 
-**Sigue pendiente**: los eventos de conversión al `dataLayer` (`lead_form_submit`, `whatsapp_click`,
-`phone_click`, `map_click`) — esto sí implica tocar código de nuevo (`ContactForm.tsx`,
-`WhatsAppButton.tsx`, etc.), pendiente de que me digas si seguimos con ello.
+**Actualización 2026-09-08 — eventos de conversión**: `lead_form_submit` ya estaba implementado desde
+que se construyó el wizard (`ProjectWizard.tsx`, vía `lib/analytics.ts`). Añadidos ahora `phone_click`
+y `whatsapp_click`: `PhoneMenu.tsx` (usado en Header, MobileMenu, Footer, CtaBand y `/contacto`) toma
+un prop `source` obligatorio para identificar desde dónde se hizo clic, y dispara `trackEvent` en el
+enlace `tel:` y en el de WhatsApp del propio desplegable. El botón flotante (`WhatsAppButton.tsx`) y
+el enlace directo de `/contacto` usan un componente nuevo, `components/ui/TrackedWhatsAppLink.tsx`
+(client component reutilizable), para no duplicar la lógica de tracking. **Solo queda `map_click`**,
+bloqueado a que exista el mapa real embebido (sección 4 más abajo).
 
 **Actualización 2026-09-04 — GA4 y dominio canónico**: propiedad GA4 creada (flujo "LRC-WEB",
 ID de medición `G-693LKTD3YR`) — falta solo crear la etiqueta de configuración de GA4 dentro de GTM
@@ -176,13 +181,13 @@ Puntos 1 y 2 **ya implementados** (2026-09-04) con el ID real `GTM-TZFP4VBC`:
    `app/(marketing)/layout.tsx` (no en el layout raíz, para que no cargue en `/studio`), usando
    `process.env.NEXT_PUBLIC_GTM_ID`, más el `<noscript>` de respaldo.
 
+3. ✅ **Eventos de conversión al `dataLayer`** (`Docs/BACKEND.md` sección 6):
+   `lead_form_submit` (`components/forms/ProjectWizard.tsx`), `whatsapp_click` y `phone_click`
+   (`components/ui/PhoneMenu.tsx` y `components/ui/TrackedWhatsAppLink.tsx`) — ver detalle arriba.
+   Solo falta `map_click`, cuando exista el mapa embebido real en `/contacto`.
+
 Pendiente:
 
-3. **Eventos de conversión al `dataLayer`** (`Docs/BACKEND.md` sección 6), en los sitios exactos:
-   - `lead_form_submit` → en `components/forms/ContactForm.tsx`, cuando `state.status === "success"`.
-   - `whatsapp_click` → en `components/layout/WhatsAppButton.tsx`, en el `onClick`/`href` del botón.
-   - `phone_click` → en cada enlace `tel:` (Header, Footer, CtaBand, página de Contacto).
-   - `map_click` → cuando exista el mapa embebido real en `/contacto`.
 4. Añadir `NEXT_PUBLIC_GTM_ID` a `.env.local` y a las variables de entorno de Vercel (ver
    `Docs/08-conexion-supabase-sanity-vercel.md`).
 

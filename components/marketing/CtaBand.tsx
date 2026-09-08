@@ -22,7 +22,7 @@ export function CtaBand({
           <h2 className="font-serif text-3xl font-semibold text-white md:text-4xl">{title}</h2>
           <p className="mt-4 max-w-lg text-base leading-relaxed text-white/70">{description}</p>
           <div className="mt-7 flex flex-wrap gap-7">
-            <PhoneMenu className="flex items-center gap-2.5 text-[15px] font-semibold text-white">
+            <PhoneMenu source="cta_band" className="flex items-center gap-2.5 text-[15px] font-semibold text-white">
               <PhoneIcon className="h-5 w-5 text-brand-beige" />
               {PHONE_NUMBER_DISPLAY}
             </PhoneMenu>

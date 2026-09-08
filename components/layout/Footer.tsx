@@ -71,7 +71,7 @@ export function Footer() {
                 <PinIcon className="mt-0.5 h-4 w-4 shrink-0 text-accent-600" />
                 [Dirección showroom], Madrid
               </p>
-              <PhoneMenu className="flex items-center gap-2.5 text-sm text-ink-700">
+              <PhoneMenu source="footer" className="flex items-center gap-2.5 text-sm text-ink-700">
                 <PhoneIcon className="h-4 w-4 shrink-0 text-accent-600" />
                 {PHONE_NUMBER_DISPLAY}
               </PhoneMenu>
