@@ -19,6 +19,20 @@ const localBusinessJsonLd = {
   telephone: PHONE_NUMBER_TEL,
   areaServed: "Comunidad de Madrid",
   priceRange: "$$",
+  openingHoursSpecification: [
+    {
+      "@type": "OpeningHoursSpecification",
+      dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+      opens: "08:00",
+      closes: "14:00",
+    },
+    {
+      "@type": "OpeningHoursSpecification",
+      dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+      opens: "16:00",
+      closes: "20:00",
+    },
+  ],
 };
 
 export default function MarketingLayout({ children }: { children: React.ReactNode }) {

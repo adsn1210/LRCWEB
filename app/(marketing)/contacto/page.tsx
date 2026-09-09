@@ -53,7 +53,11 @@ export default function ContactoPage() {
               </p>
               <p className="flex items-start gap-3 text-base text-ink-700">
                 <ClockIcon className="mt-0.5 h-5 w-5 shrink-0 text-accent-600" />
-                [Horario de atención]
+                <span>
+                  Lunes a sábado
+                  <br />
+                  8:00–14:00 y 16:00–20:00
+                </span>
               </p>
             </div>
 
