@@ -66,7 +66,7 @@ export function ProjectWizardButton() {
           setOpen(true);
           trackEvent("lead_widget_open");
         }}
-        className="fixed left-6 top-[55%] z-[90] flex h-14 items-center justify-center bg-accent-500 px-6 text-center text-[15px] font-semibold text-base-50 shadow-lg shadow-accent-500/30 transition hover:bg-accent-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500 focus-visible:ring-offset-2"
+        className="fixed right-6 top-[55%] z-[90] flex h-14 items-center justify-center bg-ink-900 px-6 text-center text-[15px] font-semibold text-base-50 shadow-lg shadow-ink-900/40 transition hover:bg-ink-900/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500 focus-visible:ring-offset-2"
       >
         Cuéntanos tu proyecto
       </button>
