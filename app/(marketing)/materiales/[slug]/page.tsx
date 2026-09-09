@@ -39,6 +39,7 @@ export default async function MaterialPage({ params }: { params: Promise<{ slug:
         description={material.heroDescription}
         primaryCta={{ label: "Pide presupuesto gratis", href: "/contacto" }}
         secondaryCta={{ label: "Ver encimeras de cocina", href: "/servicios/encimeras-de-cocina" }}
+        imageUrl={material.heroImage}
       />
 
       <Breadcrumbs items={[{ label: "Inicio", href: "/" }, { label: "Materiales" }, { label: material.title }]} />

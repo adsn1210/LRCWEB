@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { Hero } from "@/components/marketing/Hero";
 import { ProcessSteps } from "@/components/marketing/ProcessSteps";
 import { CtaBand } from "@/components/marketing/CtaBand";
@@ -64,12 +65,15 @@ export default function SobreNosotrosPage() {
 
       <section className="bg-base-100 py-14 md:py-24">
         <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-10 px-4 md:grid-cols-2 md:px-8">
-          {/* TODO: sustituir por foto real del showroom/taller cuando LRC la facilite */}
-          <div
-            className="h-72 md:h-96"
-            style={{ background: "linear-gradient(135deg,#e5e1da,#cecbc4 50%,#ad8e7f)" }}
-            aria-hidden="true"
-          />
+          <div className="relative h-72 overflow-hidden md:h-96">
+            <Image
+              src="/images/sobre-nosotros/showroom-taller.jpg"
+              alt="Muestras de materiales de encimera expuestas en pared, para comparar acabados y vetas"
+              fill
+              sizes="(min-width: 768px) 50vw, 100vw"
+              className="object-cover"
+            />
+          </div>
           <div>
             <p className="text-sm font-semibold uppercase tracking-wide text-accent-600">Dónde trabajamos</p>
             <h2 className="mt-2.5 font-serif text-3xl font-semibold text-ink-900 md:text-4xl">Nuestro showroom y taller</h2>

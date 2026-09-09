@@ -10,6 +10,7 @@ import { getProjects, toProjectCardData } from "@/lib/sanity-projects";
 import { ProcessSteps } from "@/components/marketing/ProcessSteps";
 import { CtaBand } from "@/components/marketing/CtaBand";
 import { ArrowRightIcon, BathIcon, CountertopIcon, HouseIcon, PotIcon } from "@/components/ui/icons";
+import { materials as materialsContent } from "@/lib/content/materials";
 
 export const metadata: Metadata = {
   title: "La Reina de la Casa | Encimeras y reformas en Madrid",
@@ -68,7 +69,10 @@ const materials = [
     href: "/materiales/granito",
     gradient: "linear-gradient(135deg,#dfe1e2,#9fa5aa 50%,#6f757a)",
   },
-];
+].map((m) => ({
+  ...m,
+  imageUrl: materialsContent.find((mc) => m.href.endsWith(mc.slug))?.heroImage,
+}));
 
 const processSteps = [
   { title: "Visita y presupuesto", description: "Valoramos tu espacio y te damos un presupuesto cerrado, sin sorpresas ni letra pequeña." },

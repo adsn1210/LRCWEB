@@ -10,6 +10,7 @@ export type ServiceContent = {
   intro: string[];
   highlights: string[];
   processSteps: { title: string; description: string }[];
+  heroImage?: string;
 };
 
 // Contenido hardcodeado siguiendo Docs/05-contenidos-y-diseno.md (tono cercano, primera persona
@@ -19,6 +20,7 @@ export const services: ServiceContent[] = [
   {
     slug: "encimeras-de-cocina",
     title: "Encimeras de cocina",
+    heroImage: "/images/servicios/encimeras-de-cocina.jpg",
     metaDescription:
       "Encimeras de cocina a medida en porcelánico, cuarzo compacto y granito: plantillado, fabricación en taller propio e instalación en Madrid.",
     eyebrow: "Encimeras de cocina",
@@ -59,6 +61,7 @@ export const services: ServiceContent[] = [
   {
     slug: "reformas-de-cocina",
     title: "Reforma de cocina",
+    heroImage: "/images/servicios/reformas-de-cocina.jpg",
     metaDescription:
       "Reforma integral de cocina en Madrid: diseño, mobiliario a medida, encimera y electrodomésticos con un único equipo de principio a fin.",
     eyebrow: "Reforma de cocina",
@@ -87,6 +90,7 @@ export const services: ServiceContent[] = [
   {
     slug: "reformas-de-bano",
     title: "Reforma de baño",
+    heroImage: "/images/servicios/reformas-de-bano.jpg",
     metaDescription:
       "Reforma de baño en Madrid: demolición, instalaciones, alicatado, sanitarios, mampara y encimera con un único equipo.",
     eyebrow: "Reforma de baño",
@@ -115,6 +119,7 @@ export const services: ServiceContent[] = [
   {
     slug: "reformas-integrales",
     title: "Reforma integral",
+    heroImage: "/images/servicios/reformas-integrales.jpg",
     metaDescription:
       "Reforma integral de vivienda o local comercial en Madrid, llave en mano: albañilería, instalaciones y acabados con un único interlocutor.",
     eyebrow: "Reforma integral",

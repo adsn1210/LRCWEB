@@ -11,6 +11,7 @@ export type MaterialContent = {
   features: string[];
   varieties: { name: string; description: string }[];
   care: string[];
+  heroImage?: string;
 };
 
 // Contenido hardcodeado siguiendo Docs/05-contenidos-y-diseno.md. Las variedades/acabados
@@ -22,6 +23,7 @@ export const materials: MaterialContent[] = [
   {
     slug: "porcelanico",
     title: "Porcelánico",
+    heroImage: "/images/materiales/porcelanico-encimera.jpg",
     metaDescription:
       "Encimeras de porcelánico técnico en Madrid: resistencia a rayaduras y calor, grandes formatos y mínimas juntas. Fabricación e instalación propia.",
     eyebrow: "Materiales",
@@ -55,6 +57,7 @@ export const materials: MaterialContent[] = [
   {
     slug: "cuarzo-compacto",
     title: "Cuarzo compacto",
+    heroImage: "/images/materiales/cuarzo-compacto.jpg",
     metaDescription:
       "Encimeras de cuarzo compacto (Silestone, Dekton y similares) en Madrid: superficie no porosa, amplia gama de colores. Fabricación e instalación propia.",
     eyebrow: "Materiales",
@@ -88,6 +91,7 @@ export const materials: MaterialContent[] = [
   {
     slug: "granito",
     title: "Granito",
+    heroImage: "/images/materiales/granito.jpg",
     metaDescription:
       "Encimeras de granito en Madrid: piedra natural de máxima dureza, con vetas únicas en cada pieza. Fabricación e instalación propia.",
     eyebrow: "Materiales",

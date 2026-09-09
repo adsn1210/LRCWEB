@@ -52,6 +52,7 @@ export default async function ServicioPage({ params }: { params: Promise<{ slug:
         description={service.heroDescription}
         primaryCta={{ label: "Pide presupuesto gratis", href: "/contacto" }}
         secondaryCta={{ label: "Ver proyectos", href: "/proyectos" }}
+        imageUrl={service.heroImage}
       />
 
       <Breadcrumbs items={[{ label: "Inicio", href: "/" }, { label: "Servicios" }, { label: service.title }]} />

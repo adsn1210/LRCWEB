@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { ArrowRightIcon } from "@/components/ui/icons";
 
@@ -6,13 +7,23 @@ type MaterialCardProps = {
   description: string;
   href: string;
   gradient: string;
+  imageUrl?: string;
 };
 
-// TODO: sustituir el swatch de degradado por foto real de textura cuando LRC facilite fotografía
-export function MaterialCard({ title, description, href, gradient }: MaterialCardProps) {
+export function MaterialCard({ title, description, href, gradient, imageUrl }: MaterialCardProps) {
   return (
     <div className="border border-base-200 bg-white">
-      <div className="h-44" style={{ background: gradient }} />
+      <div className="relative h-44 overflow-hidden" style={imageUrl ? undefined : { background: gradient }}>
+        {imageUrl && (
+          <Image
+            src={imageUrl}
+            alt={`Textura de ${title.toLowerCase()}`}
+            fill
+            sizes="(min-width: 768px) 33vw, 100vw"
+            className="object-cover"
+          />
+        )}
+      </div>
       <div className="p-6">
         <h3 className="font-sans text-xl font-semibold text-ink-900">{title}</h3>
         <p className="mt-2 text-base leading-relaxed text-ink-700">{description}</p>
