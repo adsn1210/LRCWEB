@@ -21,9 +21,9 @@ jobs:
     timeout-minutes: 15
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         with:
           node-version: 24
           cache: npm
@@ -34,12 +34,17 @@ jobs:
       - name: ESLint
         run: npm run lint
 
+      # typecheck genera antes los tipos globales de Next (LayoutProps, PageProps…) con
+      # `next typegen`: en un checkout limpio no existe .next/types y tsc fallaría
       - name: Comprobación de tipos
         run: npm run typecheck
 
-      # Sin claves reales: la web tiene valores por defecto cuando faltan las
-      # variables de entorno, así que el build funciona sin secretos en GitHub.
+      # El build lee contenido de Sanity, así que necesita el ID del proyecto y el dataset. Son
+      # datos públicos (van dentro del JS de la web): se guardan como *variables* del repo
+      # (Settings → Secrets and variables → Actions → Variables), no como secrets.
       - name: Build de producción
         run: npm run build
         env:
           NEXT_TELEMETRY_DISABLED: 1
+          NEXT_PUBLIC_SANITY_PROJECT_ID: ${{ vars.NEXT_PUBLIC_SANITY_PROJECT_ID }}
+          NEXT_PUBLIC_SANITY_DATASET: ${{ vars.NEXT_PUBLIC_SANITY_DATASET }}

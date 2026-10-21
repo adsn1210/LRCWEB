@@ -76,8 +76,10 @@ etiqueta de GA4 también están configurados en la interfaz de Google.
 ### 1.4 CI/CD
 
 **Actualización 2026-10-21 — CI básico montado**: `.github/workflows/ci.yml` ejecuta en cada push y
-PR a `main` ESLint (`npm run lint`), comprobación de tipos (`npm run typecheck`, script nuevo) y el
-build de producción. No necesita secretos en GitHub: el build funciona sin variables de entorno.
+PR a `main` ESLint (`npm run lint`), comprobación de tipos (`npm run typecheck`, script nuevo, que
+ejecuta antes `next typegen` porque en un checkout limpio no existen los tipos globales como
+`LayoutProps`) y el build de producción. El build necesita las *variables* (no secrets) de GitHub
+`NEXT_PUBLIC_SANITY_PROJECT_ID` y `NEXT_PUBLIC_SANITY_DATASET`, que son públicas; ningún secreto.
 Siguen pendientes Prettier y los tests de Playwright (siguiente paso del plan original).
 
 Texto original: `Docs/BACKEND.md` sección 1 decidió GitHub Actions con ESLint + Prettier + comprobación de tipos +
