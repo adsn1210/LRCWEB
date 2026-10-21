@@ -4,6 +4,15 @@ Esquema versionado de la base de datos de leads (Postgres, gestionado con Supaba
 base de datos local: `schema.sql` es la fuente de verdad que se aplica manualmente (o vía CLI de
 Supabase) sobre el proyecto Supabase real. Ver `Docs/BACKEND.md` secciones 1 y 4.
 
+## Pausa por inactividad (plan Free)
+
+El proyecto Supabase (**LRCWEB**, organización **LRC**, cuenta *lrcencimeras*) se pausa solo tras 7
+días sin actividad, y entonces falla el guardado de leads (pasó en octubre de 2026). Para evitarlo,
+`.github/workflows/supabase-keepalive.yml` hace una consulta mínima cada 3 días usando el secret
+`DATABASE_URL` de GitHub. Si el repo pasa 60 días sin commits, GitHub desactiva los workflows
+programados (avisa por email): se reactiva desde la pestaña *Actions*. Aunque la base de datos
+falle, `submitLead` sigue enviando el aviso por email, con una advertencia de que es la única copia.
+
 ## Migraciones
 
 `schema.sql` refleja el estado deseado para un proyecto Supabase nuevo (usa `create table if not

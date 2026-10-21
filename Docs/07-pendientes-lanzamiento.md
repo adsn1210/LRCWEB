@@ -70,9 +70,17 @@ importado en Vercel (no existe `.vercel/` ni `vercel.json` — normal, Vercel no
 un proyecto Next.js estándar, pero confirma que aún no se ha hecho el `import`). Ver
 `Docs/08-conexion-supabase-sanity-vercel.md` para el paso a paso.
 
+**Actualización 2026-10-21**: ✅ importado en Vercel y la web ya está en producción. GTM y la
+etiqueta de GA4 también están configurados en la interfaz de Google.
+
 ### 1.4 CI/CD
 
-`Docs/BACKEND.md` sección 1 decidió GitHub Actions con ESLint + Prettier + comprobación de tipos +
+**Actualización 2026-10-21 — CI básico montado**: `.github/workflows/ci.yml` ejecuta en cada push y
+PR a `main` ESLint (`npm run lint`), comprobación de tipos (`npm run typecheck`, script nuevo) y el
+build de producción. No necesita secretos en GitHub: el build funciona sin variables de entorno.
+Siguen pendientes Prettier y los tests de Playwright (siguiente paso del plan original).
+
+Texto original: `Docs/BACKEND.md` sección 1 decidió GitHub Actions con ESLint + Prettier + comprobación de tipos +
 Playwright, pero no existe `.github/workflows/`, Prettier no está instalado como dependencia y no
 hay ningún test todavía. No es estrictamente bloqueante para publicar una vez, pero sí para poder
 iterar con confianza después del lanzamiento.

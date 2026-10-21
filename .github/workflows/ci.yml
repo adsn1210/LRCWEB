@@ -1,0 +1,45 @@
+# CI básico: en cada push y pull request a main comprueba que el código
+# pasa ESLint, la comprobación de tipos de TypeScript y el build de producción.
+# El despliegue (CD) lo hace Vercel por su cuenta; esto solo avisa si algo se rompe.
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+# Si se suben varios commits seguidos, cancela la ejecución anterior de la misma rama
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  checks:
+    name: Lint, tipos y build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Instalar dependencias
+        run: npm ci
+
+      - name: ESLint
+        run: npm run lint
+
+      - name: Comprobación de tipos
+        run: npm run typecheck
+
+      # Sin claves reales: la web tiene valores por defecto cuando faltan las
+      # variables de entorno, así que el build funciona sin secretos en GitHub.
+      - name: Build de producción
+        run: npm run build
+        env:
+          NEXT_TELEMETRY_DISABLED: 1

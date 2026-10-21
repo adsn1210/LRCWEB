@@ -1,0 +1,29 @@
+# Keep-alive de Supabase: el plan Free pausa el proyecto tras 7 días sin actividad, y entonces
+# el formulario de leads deja de funcionar. Este workflow hace una consulta mínima cada 3 días
+# para que nunca llegue a pausarse. Necesita el secret DATABASE_URL en GitHub
+# (Settings → Secrets and variables → Actions), el mismo valor que en Vercel.
+name: Supabase keep-alive
+
+on:
+  schedule:
+    - cron: "0 8 */3 * *" # cada 3 días a las 08:00 UTC
+  workflow_dispatch: # permite lanzarlo a mano desde la pestaña Actions
+
+jobs:
+  ping:
+    name: Consulta mínima a la base de datos
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      # psql viene preinstalado en los runners de Ubuntu, no hace falta instalar nada
+      - name: Consultar la tabla leads
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: |
+          if [ -z "$DATABASE_URL" ]; then
+            echo "::error::Falta el secret DATABASE_URL en GitHub"
+            exit 1
+          fi
+          psql "$DATABASE_URL" -v ON_ERROR_STOP=1 -tAc "select count(*) from leads" > /dev/null
+          echo "Supabase respondió correctamente"

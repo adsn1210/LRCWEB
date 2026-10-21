@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useEffect, useRef, useState } from "react";
+import { startTransition, useActionState, useEffect, useRef, useState, type FormEvent } from "react";
 import { submitLead } from "@/app/(marketing)/contacto/actions";
 import { trackEvent } from "@/lib/analytics";
 import type { SubmitLeadState } from "@/lib/validations";
@@ -94,8 +94,19 @@ export function ProjectWizard({ sourcePage }: ProjectWizardProps) {
     setStep((current) => (current > 1 ? ((current - 1) as WizardStep) : current));
   };
 
+  // Con <form action={formAction}> React vacía el formulario al terminar la acción, también cuando
+  // falla: el visitante perdía lo escrito y, al reintentar desde el paso 3, el navegador no podía
+  // enfocar el campo "Nombre" vacío del paso 1, que está oculto ("An invalid form control is not
+  // focusable"). Enviando desde onSubmit se conservan los valores; si va bien, se muestra el
+  // mensaje de gracias y el formulario desaparece igualmente.
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    startTransition(() => formAction(formData));
+  };
+
   return (
-    <form action={formAction} className="flex flex-col gap-6">
+    <form onSubmit={handleSubmit} className="flex flex-col gap-6">
       <div className="flex items-center gap-2">
         {[1, 2, 3].map((dot) => (
           <span key={dot} className={`h-1.5 flex-1 rounded-full ${dot <= step ? "bg-accent-500" : "bg-base-200"}`} />
