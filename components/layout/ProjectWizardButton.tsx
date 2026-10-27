@@ -95,7 +95,10 @@ export function ProjectWizardButton() {
             >
               <XIcon className="h-5 w-5" />
             </button>
-            <ProjectWizard sourcePage="widget-flotante" />
+            {/* La ruta real (no una etiqueta tipo "widget-flotante"): se usa para el enlace del
+                email de aviso y debe empezar por "/" (ver leadSchema). /contacto nunca muestra el
+                widget, así que cualquier otra ruta identifica ya que el lead vino de aquí. */}
+            <ProjectWizard sourcePage={pathname} />
           </div>
         </div>
       )}

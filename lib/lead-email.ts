@@ -1,12 +1,11 @@
 import { SITE_URL } from "@/lib/site";
-import type { LeadInput } from "@/lib/validations";
+import { isEmail, type LeadInput } from "@/lib/validations";
 
 // Email de aviso de "nuevo lead" que recibe LRC (enviado con Resend desde contacto/actions.ts).
 // HTML con tablas y estilos en línea: es lo único que Gmail/Outlook renderizan de forma fiable.
 // Colores = tokens de Docs/FRONTEND.md sección 2. Siempre se manda también la versión en texto plano.
 
 type LeadEmailInput = Omit<LeadInput, "honeypot"> & {
-  sourcePage: string;
   savedToDb: boolean;
 };
 
@@ -81,13 +80,13 @@ export function buildLeadEmail(lead: LeadEmailInput) {
     timeStyle: "short",
   });
 
-  const isEmail = phoneOrEmail.includes("@");
+  const contactIsEmail = isEmail(phoneOrEmail);
   const phoneDigits = toPhoneDigits(phoneOrEmail);
 
   const subject = `${urgency === "lo-antes-posible" ? "🔴 " : ""}Nuevo lead: ${name} · ${serviceLabel}`;
 
   const actions = [
-    isEmail ? button(`mailto:${phoneOrEmail}`, "Responder por email", colors.ink900) : "",
+    contactIsEmail ? button(`mailto:${phoneOrEmail}`, "Responder por email", colors.ink900) : "",
     phoneDigits ? button(`tel:+${phoneDigits}`, "Llamar", colors.ink900) : "",
     phoneDigits ? button(`https://wa.me/${phoneDigits}`, "Escribir por WhatsApp", "#25D366") : "",
   ].join("");
@@ -138,7 +137,7 @@ export function buildLeadEmail(lead: LeadEmailInput) {
         ${actions ? `<tr><td style="padding:0 32px 24px;">${actions}</td></tr>` : ""}
         <tr><td style="padding:16px 32px;background:${colors.base50};border-top:1px solid ${colors.base200};font-family:Arial,Helvetica,sans-serif;font-size:12px;color:${colors.ink700};">
           Enviado desde el formulario de <a href="${escapeHtml(SITE_URL + sourcePage)}" style="color:${colors.ink700};">${escapeHtml(SITE_URL.replace(/^https?:\/\//, "") + sourcePage)}</a>.
-          ${isEmail ? "Si respondes a este email, la respuesta le llega directamente al cliente." : ""}
+          ${contactIsEmail ? "Si respondes a este email, la respuesta le llega directamente al cliente." : ""}
         </td></tr>
       </table>
     </td></tr>

@@ -1,6 +1,14 @@
 "use client";
 
-import { startTransition, useActionState, useEffect, useRef, useState, type FormEvent } from "react";
+import {
+  startTransition,
+  useActionState,
+  useEffect,
+  useRef,
+  useState,
+  type FormEvent,
+  type KeyboardEvent,
+} from "react";
 import { submitLead } from "@/app/(marketing)/contacto/actions";
 import { trackEvent } from "@/lib/analytics";
 import type { SubmitLeadState } from "@/lib/validations";
@@ -105,8 +113,17 @@ export function ProjectWizard({ sourcePage }: ProjectWizardProps) {
     startTransition(() => formAction(formData));
   };
 
+  // Intro en un campo de texto de los pasos 1-2 dispararía el envío del formulario entero, con los
+  // radios obligatorios de pasos ocultos sin rellenar: el navegador no puede enfocarlos y no pasa
+  // nada visible. Se interpreta como "Siguiente" (salvo en el textarea, donde Intro es salto de línea).
+  const handleKeyDown = (event: KeyboardEvent<HTMLFormElement>) => {
+    if (event.key !== "Enter" || step === 3 || event.target instanceof HTMLTextAreaElement) return;
+    event.preventDefault();
+    goNext();
+  };
+
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+    <form onSubmit={handleSubmit} onKeyDown={handleKeyDown} className="flex flex-col gap-6">
       <div className="flex items-center gap-2">
         {[1, 2, 3].map((dot) => (
           <span key={dot} className={`h-1.5 flex-1 rounded-full ${dot <= step ? "bg-accent-500" : "bg-base-200"}`} />
@@ -126,7 +143,16 @@ export function ProjectWizard({ sourcePage }: ProjectWizardProps) {
           <label htmlFor="name" className="text-sm font-semibold text-ink-900">
             Nombre *
           </label>
-          <input id="name" name="name" type="text" required minLength={2} autoComplete="name" className={fieldClass} />
+          <input
+            id="name"
+            name="name"
+            type="text"
+            required
+            minLength={2}
+            maxLength={100}
+            autoComplete="name"
+            className={fieldClass}
+          />
         </div>
         <div className="flex flex-col gap-2">
           <label htmlFor="phoneOrEmail" className="text-sm font-semibold text-ink-900">
@@ -138,6 +164,7 @@ export function ProjectWizard({ sourcePage }: ProjectWizardProps) {
             type="text"
             required
             minLength={6}
+            maxLength={254}
             autoComplete="tel"
             className={fieldClass}
           />

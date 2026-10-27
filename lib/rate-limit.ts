@@ -9,11 +9,19 @@ type Entry = { count: number; resetAt: number };
 // sección 4) en vez de esto.
 const hits = new Map<string, Entry>();
 
+// Una instancia "caliente" puede vivir horas: sin limpiar, el Map crecería con cada IP nueva.
+function pruneExpired(now: number) {
+  for (const [key, entry] of hits) {
+    if (now > entry.resetAt) hits.delete(key);
+  }
+}
+
 export function checkRateLimit(key: string): boolean {
   const now = Date.now();
+  pruneExpired(now);
   const entry = hits.get(key);
 
-  if (!entry || now > entry.resetAt) {
+  if (!entry) {
     hits.set(key, { count: 1, resetAt: now + WINDOW_MS });
     return true;
   }

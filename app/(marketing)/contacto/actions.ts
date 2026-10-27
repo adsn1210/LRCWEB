@@ -5,7 +5,7 @@ import { db } from "@/lib/db";
 import { resend } from "@/lib/email";
 import { buildLeadEmail } from "@/lib/lead-email";
 import { checkRateLimit } from "@/lib/rate-limit";
-import { leadSchema, type SubmitLeadState } from "@/lib/validations";
+import { isEmail, leadSchema, type SubmitLeadState } from "@/lib/validations";
 
 export async function submitLead(_prevState: SubmitLeadState, formData: FormData): Promise<SubmitLeadState> {
   const raw = {
@@ -16,9 +16,8 @@ export async function submitLead(_prevState: SubmitLeadState, formData: FormData
     honeypot: formData.get("honeypot") ?? "",
     budget: formData.get("budget") || undefined,
     urgency: formData.get("urgency") || undefined,
+    sourcePage: formData.get("source_page") || undefined,
   };
-
-  const sourcePage = (formData.get("source_page") as string) || "/contacto";
 
   const parsed = leadSchema.safeParse(raw);
 
@@ -38,7 +37,7 @@ export async function submitLead(_prevState: SubmitLeadState, formData: FormData
     return { status: "error", message: "Demasiadas solicitudes seguidas. Inténtalo de nuevo en unos minutos." };
   }
 
-  const { name, phoneOrEmail, service, message, budget, urgency } = parsed.data;
+  const { name, phoneOrEmail, service, message, budget, urgency, sourcePage } = parsed.data;
 
   // Guardado en Supabase y aviso por email son independientes: si uno de los dos falla, el lead
   // sigue llegando por el otro. Solo se muestra error al visitante si fallan ambos. (En oct 2026
@@ -62,7 +61,7 @@ export async function submitLead(_prevState: SubmitLeadState, formData: FormData
       const { error } = await resend.emails.send({
         from: process.env.RESEND_FROM_EMAIL || "LRC Web <notificaciones@contact.lareinadelacasa.com>",
         to: process.env.LEAD_NOTIFICATION_EMAIL || "info@lareinadelacasa.com",
-        replyTo: phoneOrEmail.includes("@") ? phoneOrEmail : undefined,
+        replyTo: isEmail(phoneOrEmail) ? phoneOrEmail : undefined,
         subject: email.subject,
         html: email.html,
         text: email.text,
