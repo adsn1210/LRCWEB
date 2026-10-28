@@ -56,9 +56,12 @@ en vectorial, testimonios y catálogo de acabados. Ver `Docs/05-contenidos-y-dis
 ### 1.4 Páginas legales
 
 `/aviso-legal`, `/politica-de-privacidad` y `/politica-de-cookies` existen y tienen contenido
-completo, pero aviso legal y privacidad siguen con los placeholders `[RAZÓN SOCIAL]`, `[NIF/CIF]`,
-`[DOMICILIO SOCIAL]` y `[DATOS REGISTRALES]` (aparcado por decisión del equipo, 2026-10-21). Es
-una plantilla razonable, no asesoramiento jurídico: conviene que la revise un gestor o abogado.
+completo. Titular (La Reina de la Casa Studio S.L.), NIF (B75576538) y domicilio social (Calle
+Hermosilla, 48, Planta 1, Puerta D, 28001 Madrid) están puestos desde el 2026-09-04, confirmados
+por el cliente el 2026-10-29. **Solo falta `[DATOS REGISTRALES]`** (tomo, folio, hoja e inscripción
+del Registro Mercantil), obligatorio por el art. 10 de la LSSI y bloqueante para la tienda online
+(`Docs/09-estudio-tienda-online.md`). Es una plantilla razonable, no asesoramiento jurídico:
+conviene que la revise un gestor o abogado.
 
 ### 1.5 Calidad y mantenimiento
 
