@@ -21,7 +21,12 @@ proyecto Supabase real que ya tiene datos, se añade un archivo numerado en `mig
 sentencias `alter table` necesarias, y se ejecuta a mano en el SQL Editor de Supabase — no hay
 herramienta de migraciones automática en este proyecto.
 
-**Importante para esta migración concreta:** el código de esta rama inserta `budget`/`urgency`
-sin comprobar si existen — hay que aplicar `0001_add_budget_urgency.sql` en producción **antes**
-de desplegar este código, no después. Si se despliega primero, todos los envíos de lead (incluido
-el formulario ya existente en `/contacto`) fallarán hasta que se aplique la migración.
+**Regla general:** aplica la migración en Supabase **antes** de desplegar el código que la usa. Por
+ejemplo, `submitLead` inserta `budget`/`urgency` sin comprobar si existen: si el código llega a
+producción antes que `0001_add_budget_urgency.sql`, falla el guardado de todos los leads (el aviso
+por email sigue llegando, marcado como única copia).
+
+## Conexión
+
+Producción usa el *transaction pooler* de Supabase (puerto 6543), que no admite sentencias
+preparadas: `lib/db.ts` crea el cliente con `prepare: false` y un `connect_timeout` corto.

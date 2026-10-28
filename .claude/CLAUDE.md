@@ -38,7 +38,7 @@ Los assets de marca (logo, paleta de colores) están en `Docs/branding/`.
 | Hosting de la app | **Vercel** (plan Free) | Next.js necesita procesos Node.js para server actions e ISR; el hosting compartido de Hostinger no los soporta |
 | Dominio y correo | Hostinger (ya contratado) | Solo DNS y email corporativo — la app NO se despliega aquí |
 | Analítica | GA4 + GTM + Consent Mode v2 | Medición conforme a normativa UE (AEPD/RGPD) |
-| CI/CD | GitHub Actions (ESLint, Prettier, tipos, Playwright) | Calidad de código |
+| CI/CD | GitHub Actions: ESLint, tipos y build (Prettier y Playwright pendientes) | Calidad de código |
 
 Alcance v1: home, páginas de servicio (encimeras, reforma cocina, reforma baño, reforma integral),
 materiales, galería de proyectos filtrable, sobre nosotros, contacto, legales, analítica+cookies.
@@ -65,11 +65,10 @@ estructura exacta de carpetas en `Docs/BACKEND.md` sección 2.
 
 ## Estado y roadmap
 
-Proyecto saliendo de la **Fase 0 (documentación y diseño)**, entrando en **Fase 1 (setup técnico)**.
-Activos pendientes de recibir del cliente: fotos definitivas y logo definitivo en alta resolución
-(se usan temporalmente placeholders y el logo actual de `Docs/branding/`, ver `Docs/FRONTEND.md` sección 7).
-El desarrollo (fases 1–6) se hace en Claude Code sobre este mismo repo. Ver `Docs/06-roadmap-y-fases.md`
-para el detalle de fases (estimación total v1: 10–14 semanas).
+**En producción** desde octubre de 2026 (Vercel, cada push a `main` despliega). El estado vivo,
+los pendientes y la guía de analítica (GTM/GA4, incidencias y cómo verificar) están en
+`Docs/07-pendientes-lanzamiento.md` — léelo antes de tocar analítica, dominio o contenido del
+cliente. Roadmap original en `Docs/06-roadmap-y-fases.md`.
 
 ## Convenciones para trabajar en este repo
 
@@ -79,3 +78,7 @@ para el detalle de fases (estimación total v1: 10–14 semanas).
   falta, pregúntalo primero al usuario.
 - No subas `.env`, `.env.local` ni ninguna clave real al repositorio; usa siempre `.env.example` como
   plantilla.
+- Commits firmados solo por el autor del repo: sin líneas `Co-Authored-By` ni menciones a la IA, con
+  mensajes detallados (el repositorio sirve de portfolio).
+- Antes de dar por bueno un cambio visual, compruébalo en un navegador real (Playwright), no solo
+  con lint/build.

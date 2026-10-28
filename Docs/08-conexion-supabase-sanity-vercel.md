@@ -38,7 +38,8 @@ importar el proyecto en Vercel, y llevar esas mismas variables a las variables d
 4. **Project Settings → Database → Connection string** → copia el modo **Transaction** (puerto
    `6543`, recomendado para funciones serverless como Vercel) o **Session** (puerto `5432`) — con
    el driver `postgres` (paquete `postgres` de npm que ya usa `lib/db.ts`) cualquiera de los dos
-   funciona; para Vercel es más robusto el modo *Transaction pooling*.
+   funciona; para Vercel es más robusto el modo *Transaction pooling* (ver la nota de
+   `prepare: false` en 1.3).
 5. Pega ese connection string en `DATABASE_URL` (sustituyendo `[YOUR-PASSWORD]` por la contraseña
    real).
 6. Sigue con el paso 1.1 desde el punto 2 (ejecutar `db/schema.sql`).
@@ -48,6 +49,8 @@ importar el proyecto en Vercel, y llevar esas mismas variables a las variables d
 - El cliente `postgres` (`lib/db.ts`) no valida la conexión hasta la primera consulta — si algo
   falla, se verá en los logs de Vercel (Runtime Logs) como un error al enviar el formulario, no en
   el build.
+- Producción usa el modo **Transaction** (puerto `6543`), que no admite sentencias preparadas: por
+  eso `lib/db.ts` crea el cliente con `prepare: false`. No quitarlo aunque en local funcione.
 - Plan Free de Supabase pausa el proyecto tras 7 días de inactividad total — si la web lleva tiempo
   sin tráfico y el formulario falla, revisa primero si el proyecto está "paused" en el dashboard.
 
@@ -63,9 +66,10 @@ rellenas. Lo que falta es solo cargar contenido y, si hace falta, dar acceso a V
    con permisos **Viewer**, y ponlo en `SANITY_API_READ_TOKEN` (hoy no está presente en tu
    `.env.local` — solo hace falta si las queries fallan por permisos).
 3. Cuando subas contenido real (proyectos, servicios, materiales, testimonios) desde el Studio, se
-   verá automáticamente en las páginas que ya consulten Sanity — hoy, `servicios`, `materiales` y
-   `proyectos` siguen con contenido hardcodeado en `lib/content/` y `lib/placeholder-projects.ts`
-   (ver `Docs/07-pendientes-lanzamiento.md` sección 4, es un nice-to-have migrar esto).
+   verá automáticamente en las páginas que ya consulten Sanity: imagen del Hero de la home
+   (`siteSettings`) y proyectos con foto de antes y después (galería, home y páginas de servicio y
+   material). Los textos de servicios y materiales siguen en `lib/content/` (ver
+   `Docs/07-pendientes-lanzamiento.md` sección 1.6, es un nice-to-have migrarlos).
 4. Da acceso al cliente si quieres que gestione contenido: **sanity.io/manage → tu proyecto →
    Members → Invite** con su email, rol **Editor** (no **Administrator**, para que no pueda
    cambiar el schema ni borrar el proyecto).
@@ -93,14 +97,20 @@ DATABASE_URL
 RESEND_API_KEY
 RESEND_FROM_EMAIL
 LEAD_NOTIFICATION_EMAIL
-NEXT_PUBLIC_SITE_URL          (pon https://www.lareinadelacasa.com explícitamente)
-NEXT_PUBLIC_GTM_ID            (cuando exista, ver Docs/07-pendientes-lanzamiento.md)
+NEXT_PUBLIC_SITE_URL          (opcional: el código usa https://lareinadelacasa.com por defecto)
+NEXT_PUBLIC_GTM_ID            (GTM-TZFP4VBC, ver Docs/07-pendientes-lanzamiento.md)
 ```
 
-Copia los valores directamente desde tu `.env.local` — no hace falta reescribirlos a mano si tienes
-el archivo delante.
+Copia los valores desde tu `.env.local`, pero **sin comillas**: en `.env.local` Next quita las
+comillas al leer el archivo, mientras que Vercel guarda literalmente lo que se pega. En oct 2026
+`NEXT_PUBLIC_GTM_ID` se pegó como `"GTM-TZFP4VBC"` y GA4 estuvo semanas sin datos
+(`Docs/07-pendientes-lanzamiento.md` sección 2.3). Los valores `NEXT_PUBLIC_*` se incrustan en el
+build: tras cambiarlos hay que hacer **Redeploy** para que surtan efecto.
 
 ### 3.3 Dominio custom (Hostinger → Vercel)
+
+> **Atención (2026-10-28)**: en producción está al revés — `lareinadelacasa.com` redirige a `www`.
+> Ver `Docs/07-pendientes-lanzamiento.md` sección 1.2 para alinearlo.
 
 **Dominio canónico: `lareinadelacasa.com` (sin `www`)** — decisión del 2026-09-04, para que coincida
 con el flujo de datos ya creado en GA4. `www.lareinadelacasa.com` debe existir solo como redirección

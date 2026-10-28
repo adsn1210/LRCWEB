@@ -36,3 +36,9 @@ Abre [http://localhost:3000](http://localhost:3000).
 - `npm run dev` — servidor de desarrollo
 - `npm run build` — build de producción
 - `npm run lint` — ESLint
+- `npm run typecheck` — comprobación de tipos (genera antes los tipos de rutas de Next)
+
+## Estado
+
+En producción en Vercel. Pendientes, decisiones abiertas y guía de analítica en
+[`Docs/07-pendientes-lanzamiento.md`](./Docs/07-pendientes-lanzamiento.md).

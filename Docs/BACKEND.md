@@ -80,17 +80,24 @@ Además de `project`, crear con la misma lógica: `service` (título, slug, desc
 Flujo: `ContactForm` (client component) → **server action** en `app/contacto/actions.ts` → valida con Zod → guarda el lead en Supabase → envía email con Resend a LRC → devuelve estado de éxito/error al formulario.
 
 ```ts
-// lib/validations.ts
+// lib/validations.ts (resumen; ver el archivo para el detalle)
 export const leadSchema = z.object({
-  name: z.string().min(2),
-  phoneOrEmail: z.string().min(6),
+  name: z.string().trim().min(2).max(100),
+  phoneOrEmail: z.string().trim().min(6).max(254),
   service: z.enum(['encimeras', 'reforma-cocina', 'reforma-bano', 'reforma-integral', 'otro']),
-  message: z.string().max(1000).optional(),
+  message: z.string().trim().max(1000).optional(),
   honeypot: z.string().max(0), // debe llegar vacío; si no, es spam → descartar en silencio
+  budget: z.coerce.number().min(1000).max(30000).optional(),
+  urgency: z.enum(['mas-3-meses', 'menos-3-meses', 'lo-antes-posible']).optional(),
+  sourcePage: z.string().max(200).regex(/^\/[^\s]*$/).catch('/contacto'), // solo rutas internas
 })
 ```
 
-Tabla en Supabase: `leads (id, created_at, name, contact, service, message, source_page)`. Anti-spam: campo honeypot oculto por CSS (nunca mostrado a humanos) + límite de 3 envíos por IP cada 10 minutos (middleware simple o Upstash Ratelimit free tier). No usar CAPTCHA visible: empeora la conversión sin necesidad para este volumen.
+El formulario real es el asistente de 3 pasos `components/forms/ProjectWizard.tsx`, en `/contacto` y
+en el widget flotante (`ProjectWizardButton.tsx`). Guardado en Supabase y aviso por email son
+independientes: si falla uno, el lead llega por el otro, y solo se muestra error si fallan los dos.
+
+Tabla en Supabase: `leads (id, created_at, name, contact, service, message, source_page, budget, urgency)`. Anti-spam: campo honeypot oculto por CSS (nunca mostrado a humanos) + límite de 3 envíos por IP cada 10 minutos (middleware simple o Upstash Ratelimit free tier). No usar CAPTCHA visible: empeora la conversión sin necesidad para este volumen.
 
 ## 5. SEO técnico
 
@@ -104,7 +111,8 @@ Tabla en Supabase: `leads (id, created_at, name, contact, service, message, sour
 - **Google Tag Manager** se carga en `layout.tsx` mediante `next/script`, con `strategy="afterInteractive"`.
 - Antes de que el usuario decida sobre cookies, GTM debe arrancar en modo "denegado por defecto": inyectar el snippet de `gtag('consent', 'default', {...})` con `ad_storage: 'denied'`, `analytics_storage: 'denied'`, `ad_user_data: 'denied'`, `ad_personalization: 'denied'` **antes** de cargar GTM.
 - El `CookieBanner` (ver `FRONTEND.md` para el diseño) al aceptar/rechazar/configurar llama a `gtag('consent', 'update', {...})` con los valores elegidos por categoría, y guarda la decisión en una cookie propia (p. ej. `lrc_consent`, 12 meses) para no volver a preguntar.
-- Eventos GA4 a disparar como conversión: `lead_form_submit`, `whatsapp_click`, `phone_click`, `map_click`. Dispararlos vía `dataLayer.push(...)` en los componentes correspondientes, no hardcoded en GTM, para que queden versionados en el código.
+- Eventos GA4 a disparar como conversión: `lead_form_submit`, `whatsapp_click`, `phone_click`, `email_click`, `map_click` (este último pendiente del mapa). Dispararlos vía `trackEvent()` de `lib/analytics.ts` (que hace `dataLayer.push`) en los componentes correspondientes, no hardcoded en GTM, para que queden versionados en el código. En GA4 hay que marcarlos como **eventos clave**.
+- Estado real, incidencias y checklist de GA4: `Docs/07-pendientes-lanzamiento.md` (parte "Analítica").
 - Ver el detalle legal completo en `04-seo-analitica-cookies.md`.
 
 ## 7. Variables de entorno
@@ -113,15 +121,19 @@ Tabla en Supabase: `leads (id, created_at, name, contact, service, message, sour
 NEXT_PUBLIC_SANITY_PROJECT_ID=
 NEXT_PUBLIC_SANITY_DATASET=production
 SANITY_API_READ_TOKEN=
-DATABASE_URL=                # Supabase Postgres
+DATABASE_URL=                # Supabase Postgres (transaction pooler, puerto 6543)
 RESEND_API_KEY=
+RESEND_FROM_EMAIL="LRC Web <notificaciones@contact.lareinadelacasa.com>"
 LEAD_NOTIFICATION_EMAIL=info@lareinadelacasa.com
-NEXT_PUBLIC_GTM_ID=
+NEXT_PUBLIC_GTM_ID=GTM-TZFP4VBC
+NEXT_PUBLIC_SITE_URL=https://lareinadelacasa.com
 ```
+
+En Vercel los valores van **sin comillas** (ver `Docs/08-conexion-supabase-sanity-vercel.md` 3.2).
 
 ## 8. Convenciones de código
 
-TypeScript en modo `strict`. ESLint + Prettier con las reglas por defecto de `create-next-app`. Un componente por archivo, componentes de servidor por defecto y `"use client"` solo donde haga falta interactividad (formulario, galería filtrable, banner de cookies, menú móvil). Commits pequeños y descriptivos; no subir `.env.local` al repositorio (usar `.env.example` como plantilla).
+TypeScript en modo `strict`. ESLint con las reglas por defecto de `create-next-app` (Prettier está decidido pero aún no instalado). Metadatos de página siempre con `pageMetadata()` de `lib/seo.ts` (canonical + Open Graph); datos de contacto (teléfono, WhatsApp, email, dirección) solo desde `lib/site.ts`. Un componente por archivo, componentes de servidor por defecto y `"use client"` solo donde haga falta interactividad (formulario, galería filtrable, banner de cookies, menú móvil). Commits pequeños y descriptivos; no subir `.env.local` al repositorio (usar `.env.example` como plantilla).
 
 ## 9. Despliegue
 

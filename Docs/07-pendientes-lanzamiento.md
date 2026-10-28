@@ -1,224 +1,155 @@
 ---
-title: LRC WEB · Documento 7 — Pendientes para lanzamiento y guía de cookies/Google
+title: LRC WEB · Documento 7 — Estado del lanzamiento, pendientes y guía de analítica
 fecha: 2026-09-04
+actualizado: 2026-10-28
 estado: Vivo — actualizar a medida que se completen puntos
 ---
 
-# Pendientes para lanzamiento
+# Estado y pendientes
 
-Repaso a fecha de hoy de lo que falta para poder publicar la web en producción con todo completo.
-Ver `Docs/06-roadmap-y-fases.md` para el roadmap general y `Docs/03-arquitectura-informacion-sitemap.md`
-para el mapa del sitio de referencia.
+La web está **en producción** desde octubre de 2026 (Vercel, rama `main`). Este documento recoge lo
+que queda por hacer y, en la segunda parte, cómo está montada la analítica y qué revisar en ella.
+Ver `Docs/06-roadmap-y-fases.md` para el roadmap y `Docs/08-conexion-supabase-sanity-vercel.md`
+para la conexión de servicios.
 
-## 1. Bloqueantes (no se puede lanzar sin esto)
+## 1. Pendientes ordenados por impacto
 
-### 1.1 Páginas legales — creadas 2026-09-04, falta solo un dato
+### 1.1 Medición (GA4 / GTM) — lo más urgente
 
-`/aviso-legal`, `/politica-de-privacidad` y `/politica-de-cookies` **ya existen** — dejan de dar
-404, el banner de cookies y el footer ya enlazan a páginas reales.
+Sin medición no se sabe si la web genera tráfico ni leads. Estado a 2026-10-28:
 
-- **Política de cookies**: ✅ completa (tabla de cookies reales, explicación de tipos, y un botón
-  "Volver a configurar mis cookies" nuevo — tanto en la propia página como en el footer — que borra
-  la decisión guardada y vuelve a mostrar el banner; antes no existía forma de cambiar de opinión).
-- **Aviso legal** y **Política de privacidad**: ✅ estructura y contenido legal completos (LSSI-CE
-  y RGPD respectivamente), pero con **placeholders `[RAZÓN SOCIAL]`, `[NIF/CIF]`, `[DOMICILIO
-  SOCIAL]` y `[DATOS REGISTRALES]`** pendientes de los datos fiscales reales de la empresa. En
-  cuanto los tengas, es un cambio rápido (buscar y sustituir en
-  `app/(marketing)/aviso-legal/page.tsx` y `app/(marketing)/politica-de-privacidad/page.tsx`).
-  **Importante**: este contenido es una plantilla legal estándar razonable, no asesoramiento
-  jurídico — conviene que lo revise un gestor/abogado antes del lanzamiento definitivo,
-  especialmente la cláusula de plazo de conservación de datos.
+| Punto | Estado | Quién / dónde |
+|---|---|---|
+| GTM carga y ejecuta la etiqueta de GA4 | ✅ corregido 2026-10-28 (ver 2.3) | — |
+| Marcar los eventos de lead como **eventos clave** | ❌ hoy solo existe `purchase` (el de serie) | GA4 → Administrar → Eventos clave |
+| Subir la **retención de datos** de 2 a 14 meses | ❌ está en 2 meses | GA4 → Administrar → Recogida y retención de datos |
+| Pausar la etiqueta GTM que envía `lrc-web-Evento` en cada página | ❌ ensucia los informes | GTM → Etiquetas → publicar |
+| Conectar **Google Search Console** y enviar el sitemap | ❓ sin verificar | search.google.com/search-console |
+| Vincular Search Console con GA4 | ❓ sin verificar | GA4 → Administrar → Vinculaciones |
+| Ficha de **Google Business Profile** con enlace a la web | ❓ sin verificar | business.google.com |
 
-### 1.2 GTM / Consent Mode v2 — código ya implementado (2026-09-04)
+Eventos que hay que dar de alta como eventos clave (se pueden crear por nombre antes de que lleguen):
+`lead_form_submit`, `phone_click`, `whatsapp_click`, `email_click`.
 
-El contenedor real es `GTM-TZFP4VBC`. Ya está en el código (`app/layout.tsx` y
-`app/(marketing)/layout.tsx`, usando `next/script` en vez de pegar el `<script>` a mano — ver
-sección 2 más abajo para el detalle): snippet de consentimiento por defecto (denegado, en
-`beforeInteractive` dentro del layout raíz), carga de GTM (`afterInteractive`, solo en páginas de
-marketing, no en `/studio`) y el `<noscript>` de respaldo. De paso corregí un bug real en
-`CookieBanner.tsx`: un visitante recurrente con la cookie de consentimiento ya guardada nunca
-reenviaba esa decisión a `gtag` en cargas de página posteriores — con GTM ya cargando de verdad,
-eso significaba que jamás se activaba la analítica para nadie que ya hubiera aceptado antes. Ya
-corregido con un `useEffect` que sincroniza el consentimiento guardado en cada carga.
+### 1.2 Dominio canónico — decisión pendiente
 
-**Pendiente de añadir tú** (bloqueado por permisos de escritura sobre `.env.local`): la línea
-`NEXT_PUBLIC_GTM_ID="GTM-TZFP4VBC"` al final de `.env.local`, y la misma variable en Vercel cuando
-se despliegue (ver `Docs/08-conexion-supabase-sanity-vercel.md`).
+El código y la documentación dicen que el dominio canónico es `lareinadelacasa.com` **sin www**
+(`lib/site.ts`), pero en Vercel está configurado al revés: `lareinadelacasa.com` redirige (308) a
+`www.lareinadelacasa.com`. Consecuencia: sitemap, robots, canonical y JSON-LD anuncian URLs que
+redirigen. Hay que alinearlo de una de estas dos formas:
 
-**Actualización 2026-09-08 — eventos de conversión**: `lead_form_submit` ya estaba implementado desde
-que se construyó el wizard (`ProjectWizard.tsx`, vía `lib/analytics.ts`). Añadidos ahora `phone_click`
-y `whatsapp_click`: `PhoneMenu.tsx` (usado en Header, MobileMenu, Footer, CtaBand y `/contacto`) toma
-un prop `source` obligatorio para identificar desde dónde se hizo clic, y dispara `trackEvent` en el
-enlace `tel:` y en el de WhatsApp del propio desplegable. El botón flotante (`WhatsAppButton.tsx`) y
-el enlace directo de `/contacto` usan un componente nuevo, `components/ui/TrackedWhatsAppLink.tsx`
-(client component reutilizable), para no duplicar la lógica de tracking. **Solo queda `map_click`**,
-bloqueado a que exista el mapa real embebido (sección 4 más abajo).
+- **Recomendado**: en Vercel → Settings → Domains, marcar `lareinadelacasa.com` como dominio
+  principal y `www` como redirección. No hay que tocar código.
+- Alternativa: dejar `www` como principal y poner `NEXT_PUBLIC_SITE_URL=https://www.lareinadelacasa.com`
+  en Vercel (y redeploy). Actualizar entonces el comentario de `lib/site.ts` y este documento.
 
-**Actualización 2026-09-04 — GA4 y dominio canónico**: propiedad GA4 creada (flujo "LRC-WEB",
-ID de medición `G-693LKTD3YR`) — falta solo crear la etiqueta de configuración de GA4 dentro de GTM
-(ver Paso 2-3 más abajo, es un paso en la interfaz de Google, no en el código). El flujo de datos de
-GA4 apunta a `lareinadelacasa.com` sin `www`, así que ese pasa a ser **el dominio canónico del
-proyecto** — actualizado en `lib/site.ts`, `.env.example`, `app/robots.ts` (que tenía su propio
-fallback duplicado de dominio, ahora corregido para importar de `lib/site.ts` y no poder
-desincronizarse) y `Docs/08-conexion-supabase-sanity-vercel.md`. `www.lareinadelacasa.com` debe
-quedar como redirección 301 hacia el apex, no como sitio propio.
+### 1.3 Contenido pendiente del cliente
 
-### 1.3 Vercel
+Dirección del showroom (al recibirla: `SHOWROOM_ADDRESS` en `lib/site.ts` y `address`/`geo` en el
+JSON-LD de `app/(marketing)/layout.tsx`; hasta entonces no se muestra ninguna dirección), URLs de
+redes sociales (`socialLinks` en `components/layout/Footer.tsx`; sin URL no se muestra el icono),
+fotos reales de proyectos (se suben en `/studio`, la galería ya las lee de Sanity), logo definitivo
+en vectorial, testimonios y catálogo de acabados. Ver `Docs/05-contenidos-y-diseno.md`.
 
-El repositorio está en GitHub (`adsn1210/LRCWEB`) pero no hay evidencia de que el proyecto esté
-importado en Vercel (no existe `.vercel/` ni `vercel.json` — normal, Vercel no los necesita para
-un proyecto Next.js estándar, pero confirma que aún no se ha hecho el `import`). Ver
-`Docs/08-conexion-supabase-sanity-vercel.md` para el paso a paso.
+### 1.4 Páginas legales
 
-**Actualización 2026-10-21**: ✅ importado en Vercel y la web ya está en producción. GTM y la
-etiqueta de GA4 también están configurados en la interfaz de Google.
+`/aviso-legal`, `/politica-de-privacidad` y `/politica-de-cookies` existen y tienen contenido
+completo, pero aviso legal y privacidad siguen con los placeholders `[RAZÓN SOCIAL]`, `[NIF/CIF]`,
+`[DOMICILIO SOCIAL]` y `[DATOS REGISTRALES]` (aparcado por decisión del equipo, 2026-10-21). Es
+una plantilla razonable, no asesoramiento jurídico: conviene que la revise un gestor o abogado.
 
-### 1.4 CI/CD
+### 1.5 Calidad y mantenimiento
 
-**Actualización 2026-10-21 — CI básico montado**: `.github/workflows/ci.yml` ejecuta en cada push y
-PR a `main` ESLint (`npm run lint`), comprobación de tipos (`npm run typecheck`, script nuevo, que
-ejecuta antes `next typegen` porque en un checkout limpio no existen los tipos globales como
-`LayoutProps`) y el build de producción. El build necesita las *variables* (no secrets) de GitHub
-`NEXT_PUBLIC_SANITY_PROJECT_ID` y `NEXT_PUBLIC_SANITY_DATASET`, que son públicas; ningún secreto.
-Siguen pendientes Prettier y los tests de Playwright (siguiente paso del plan original).
+- **CI** (`.github/workflows/ci.yml`): ESLint, tipos y build en cada push/PR a `main`. Necesita las
+  *variables* de GitHub `NEXT_PUBLIC_SANITY_PROJECT_ID` y `NEXT_PUBLIC_SANITY_DATASET`.
+- **Keep-alive de Supabase** (`.github/workflows/supabase-keepalive.yml`): consulta cada 3 días para
+  que el plan Free no pause el proyecto (pasó en oct 2026 y se perdían leads). Necesita el secret
+  `DATABASE_URL`. GitHub desactiva los workflows programados tras 60 días sin commits.
+- Pendiente: Prettier y tests de Playwright (decisión original de `Docs/BACKEND.md` sección 1).
 
-Texto original: `Docs/BACKEND.md` sección 1 decidió GitHub Actions con ESLint + Prettier + comprobación de tipos +
-Playwright, pero no existe `.github/workflows/`, Prettier no está instalado como dependencia y no
-hay ningún test todavía. No es estrictamente bloqueante para publicar una vez, pero sí para poder
-iterar con confianza después del lanzamiento.
+### 1.6 Nice-to-have
 
-## 2. Estado real de las credenciales (corrección importante)
-
-En la revisión anterior dije que Supabase y Resend no estaban configurados — **eso estaba
-desactualizado**. Comprobé `.env.local` de nuevo (solo si cada variable está rellena o vacía, sin
-leer los valores) y el estado real es:
-
-| Variable | Estado |
-|---|---|
-| `NEXT_PUBLIC_SANITY_PROJECT_ID` | ✅ rellena |
-| `NEXT_PUBLIC_SANITY_DATASET` | ✅ rellena |
-| `SANITY_API_READ_TOKEN` | ❌ no presente (puede no hacer falta si el dataset es público en modo lectura) |
-| `DATABASE_URL` (Supabase) | ✅ rellena |
-| `RESEND_API_KEY` | ✅ rellena |
-| `RESEND_FROM_EMAIL` | ✅ rellena |
-| `LEAD_NOTIFICATION_EMAIL` | ✅ rellena |
-| `NEXT_PUBLIC_GTM_ID` | ❌ no presente |
-| `NEXT_PUBLIC_SITE_URL` | ❌ no presente (usa el valor por defecto del código, que ya es el dominio real) |
-
-**Pendiente de verificar** (no lo he probado en esta sesión): que la tabla `leads` exista realmente
-en el Supabase real — hay que ejecutar `db/schema.sql` en el SQL Editor de Supabase si no se ha
-hecho, y probar el formulario de `/contacto` de verdad para confirmar que el lead llega a la base de
-datos y el email de aviso se envía. Ver `Docs/08-conexion-supabase-sanity-vercel.md`.
-
-## 3. Contenido pendiente del cliente
-
-Fotos reales de proyectos (todo son degradados de color por ahora), logo definitivo en alta
-resolución y en vectorial, teléfono, dirección del showroom, horario de atención, URLs reales de
-redes sociales (hoy son `#` en el footer), catálogo real de acabados de materiales, testimonios de
-clientes. Ver `Docs/05-contenidos-y-diseno.md` sección "Activos que hay que recopilar del cliente".
-
-## 4. Nice-to-have (no bloquea el lanzamiento)
-
-- Migrar el contenido hardcodeado de servicios/materiales/proyectos a Sanity, para que se pueda
-  editar sin tocar código (hoy vive en `lib/content/services.ts`, `lib/content/materials.ts` y
-  `lib/placeholder-projects.ts`, todos con comentarios `TODO` para esta migración).
-- Mapa de Google Maps embebido en `/contacto` (pendiente de tener la dirección real del showroom).
-- Rate-limit del formulario más robusto con Upstash Ratelimit (`Docs/BACKEND.md` sección 4) si el
-  spam se convierte en un problema real — el actual es en memoria y "best effort" en serverless.
+- Migrar a Sanity el contenido de servicios y materiales (`lib/content/services.ts`,
+  `lib/content/materials.ts`), hoy en código.
+- Mapa de Google Maps en `/contacto` con evento `map_click`, cuando haya dirección.
+- Rate-limit con Upstash si aparece spam real (el actual es en memoria, "best effort").
+- Registrar la página de entrada de los visitantes que aceptan cookies (ver 2.4).
 
 ---
 
-# Guía: conectar Google (GTM, GA4, Consent Mode) y cerrar el tema cookies
+# Analítica: cómo está montada y qué revisar
 
-## Por qué esto es tan importante
+## 2.1 Piezas
 
-España (AEPD) y el RGPD exigen que **no se cargue ningún script de analítica o publicidad que use
-cookies no esenciales hasta que el usuario dé su consentimiento explícito**. Hacerlo mal (cargar GA4
-antes de que el usuario decida) es una infracción real y sancionable. Por eso todo el diseño de este
-proyecto pasa por "Consent Mode v2": todo arranca denegado por defecto, y solo se activa cuando el
-usuario lo permite.
+| Pieza | Valor | Dónde |
+|---|---|---|
+| Contenedor GTM | `GTM-TZFP4VBC` | Variable `NEXT_PUBLIC_GTM_ID` (Vercel y `.env.local`) |
+| Propiedad GA4 | "la reina de la casa" (`properties/397656204`) | Cuenta Google `lrcencimeras@gmail.com` |
+| Flujo de datos | LRC-WEB, `G-693LKTD3YR` | Configurado dentro de GTM, no en el código |
+| Otro flujo en la misma propiedad | "Mi sitio web de encimeras", `G-RD8GPV6VWG` (encimerabarata.com) | Sus datos se mezclan en los informes: filtrar por flujo o nombre de host |
 
-**Estado actual real (actualizado 2026-09-04)**: el banner de cookies
-(`components/layout/CookieBanner.tsx`) guarda la decisión en la cookie `lrc_consent` (12 meses) y
-llama a `gtag('consent', 'update', {...})` con los 4 parámetros que exige Consent Mode v2, tanto en
-el momento de decidir como en cada carga posterior de página para visitantes recurrentes. El
-snippet de consentimiento por defecto (denegado) y la carga de GTM ya están wireados en el código
-(`app/layout.tsx` / `app/(marketing)/layout.tsx`) usando el ID real `GTM-TZFP4VBC` — solo falta que
-la variable `NEXT_PUBLIC_GTM_ID` exista en `.env.local` (pendiente de que la añadas tú, ver más
-abajo) y en Vercel para que se active de verdad.
+## 2.2 Flujo en el código
 
-## Paso a paso para activarlo
+1. `app/layout.tsx` fija Consent Mode v2 **denegado por defecto** (`beforeInteractive`).
+2. `app/(marketing)/layout.tsx` carga GTM (no en `/studio`).
+3. `components/layout/CookieBanner.tsx` guarda la decisión en la cookie `lrc_consent` (12 meses) y
+   llama a `gtag('consent', 'update', …)`, también en cada carga para visitantes recurrentes.
+4. Los eventos se envían al `dataLayer` desde los componentes con `trackEvent()` (`lib/analytics.ts`):
 
-### Paso 1 — Crear la cuenta y el contenedor de GTM
+| Evento | Se dispara en |
+|---|---|
+| `lead_form_submit` | Envío correcto del formulario (`ProjectWizard.tsx`) |
+| `lead_widget_open` / `lead_widget_step` | Apertura y pasos del asistente |
+| `phone_click`, `whatsapp_click` | `PhoneMenu.tsx`, `TrackedWhatsAppLink.tsx` (parámetro `source`) |
+| `email_click` | `TrackedEmailLink.tsx` (contacto, footer, CtaBand) |
+| `map_click` | Pendiente, cuando exista el mapa |
 
-1. Entra en [tagmanager.google.com](https://tagmanager.google.com) con la cuenta de Google que vaya
-   a ser la "cuenta oficial" de LRC (recomendable que sea del cliente, no personal tuya, para que la
-   propiedad sea de la empresa).
-2. Crea una cuenta nueva → nombre "La Reina de la Casa".
-3. Crea un contenedor → tipo **Web**, nombre `lareinadelacasa.com`.
-4. Te da un ID con forma `GTM-XXXXXXX`. Ese es el valor que va en `NEXT_PUBLIC_GTM_ID`.
+Las etiquetas de GTM que reenvían estos eventos a GA4 se configuran en la interfaz de GTM.
 
-### Paso 2 — Crear la propiedad de GA4
+## 2.3 Incidencia de octubre de 2026: GA4 sin datos
 
-1. En [analytics.google.com](https://analytics.google.com), crea una propiedad GA4 nueva para el
-   dominio.
-2. Copia el **ID de medición** (`G-XXXXXXXXXX`), lo necesitarás dentro de GTM, no en el código.
-3. Dentro de GTM, crea una etiqueta tipo "Google Analytics: Configuración de GA4" con ese ID, con el
-   disparador "All Pages" (o mejor, ligado al Consent Mode — ver paso 3).
+Desde el lanzamiento GA4 no registró ninguna visita. Causa: la variable `NEXT_PUBLIC_GTM_ID` se
+guardó en Vercel **con comillas dentro del valor** (`"GTM-TZFP4VBC"`). La web pedía
+`gtm.js?id=%22GTM-TZFP4VBC%22`, Google devolvía un contenedor que no ejecutaba ninguna etiqueta, y
+no salía ni una petición a GA4. En local no se notaba porque Next quita las comillas al leer
+`.env.local`. Arreglado quitando las comillas en Vercel + redeploy; además `lib/analytics.ts` sanea
+el ID para que no pueda repetirse.
 
-### Paso 3 — Configurar Consent Mode v2 dentro de GTM
+Cómo comprobar que la medición funciona: abrir la web, aceptar cookies, navegar a otra página y,
+en DevTools → Red, filtrar por `collect`: debe aparecer una petición a
+`region1.google-analytics.com/g/collect` con `tid=G-693LKTD3YR` y respuesta 204. Ojo: los
+bloqueadores de anuncios (uBlock, Brave, DNS privados…) impiden esas peticiones, y GA4 descarta
+el tráfico de navegadores automatizados (`HeadlessChrome`).
 
-GTM tiene soporte nativo para Consent Mode desde 2024. En el propio contenedor:
+## 2.4 Cómo se cuentan las visitas con Consent Mode
 
-1. Ve a **Admin → Configuración del contenedor** y activa "Consent Overview".
-2. En cada etiqueta de analítica/marketing, en la pestaña "Consentimiento" (Advanced Settings →
-   Consent Settings), marca los tipos de consentimiento adicionales requeridos (`analytics_storage`
-   para GA4, `ad_storage`/`ad_user_data`/`ad_personalization` si en el futuro se añaden campañas de
-   Ads).
-3. Esto hace que GTM **no dispare la etiqueta hasta que reciba la señal de consentimiento
-   correspondiente** — el mismo mecanismo que ya alimenta `CookieBanner.tsx`.
+- Antes de decidir (o si rechaza), GA4 recibe solo "pings" sin cookies (`gcs=G100`): sirven para
+  el modelado de Google pero **no aparecen** en informes ni en tiempo real.
+- Tras aceptar, las páginas siguientes llegan con cookies (`gcs=G111`) y sí cuentan. La página de
+  entrada de quien acepta no se registra como visita completa (posible mejora: reenviar un
+  `page_view` al aceptar).
+- Por tanto GA4 siempre mostrará menos visitas que las reales. Search Console (clics desde Google)
+  no depende de cookies y es la cifra fiable de tráfico orgánico.
 
-### Paso 4 — Código: qué está hecho y qué falta
+## 2.5 Consultar GA4 desde Claude Code
 
-Puntos 1 y 2 **ya implementados** (2026-09-04) con el ID real `GTM-TZFP4VBC`:
+Hay un servidor MCP de Google Analytics (`analytics-mcp`, instalado con pipx y registrado a nivel de
+usuario en Claude Code) con acceso **solo de lectura** a la propiedad, usando las credenciales de
+`lrcencimeras@gmail.com` (ADC con un cliente OAuth propio del proyecto de Google Cloud
+`lrcencimeras-analytics`). Si las credenciales caducan, se renuevan con:
 
-1. ✅ **Snippet de consentimiento por defecto**, en `app/layout.tsx`, con `next/script` y
-   `strategy="beforeInteractive"` (es la única estrategia que Next.js permite en el layout raíz, y
-   se inyecta siempre en el `<head>` sin importar dónde se coloque el componente) — todo denegado
-   (`analytics_storage`, `ad_storage`, `ad_user_data`, `ad_personalization` en `'denied'`,
-   `wait_for_update: 500`).
-2. ✅ **Carga de GTM**: `next/script` con `strategy="afterInteractive"` en
-   `app/(marketing)/layout.tsx` (no en el layout raíz, para que no cargue en `/studio`), usando
-   `process.env.NEXT_PUBLIC_GTM_ID`, más el `<noscript>` de respaldo.
+```
+gcloud auth application-default login --client-id-file="%APPDATA%\gcloud\lrc-analytics-oauth-client.json" --scopes=https://www.googleapis.com/auth/analytics.readonly,https://www.googleapis.com/auth/cloud-platform
+```
 
-3. ✅ **Eventos de conversión al `dataLayer`** (`Docs/BACKEND.md` sección 6):
-   `lead_form_submit` (`components/forms/ProjectWizard.tsx`), `whatsapp_click` y `phone_click`
-   (`components/ui/PhoneMenu.tsx` y `components/ui/TrackedWhatsAppLink.tsx`) — ver detalle arriba.
-   Solo falta `map_click`, cuando exista el mapa embebido real en `/contacto`.
+El cliente OAuth por defecto de `gcloud` no sirve: Google lo bloquea para el permiso de Analytics.
 
-Pendiente:
-
-4. Añadir `NEXT_PUBLIC_GTM_ID` a `.env.local` y a las variables de entorno de Vercel (ver
-   `Docs/08-conexion-supabase-sanity-vercel.md`).
-
-### Paso 5 — Contenido de la política de cookies
-
-La página `/politica-de-cookies` (pendiente de crear, ver sección 1.1) debe listar, como mínimo:
+## 2.6 Cookies declaradas en `/politica-de-cookies`
 
 | Cookie | Tipo | Duración | Finalidad |
 |---|---|---|---|
-| `lrc_consent` | Técnica/propia | 12 meses | Recordar tu decisión sobre cookies para no volver a preguntar |
-| `_ga`, `_ga_*` | Analítica (Google Analytics, terceros) | hasta 13 meses (GA4 estándar) | Medir el uso del sitio, solo si aceptas cookies analíticas |
+| `lrc_consent` | Técnica/propia | 12 meses | Recordar la decisión sobre cookies |
+| `_ga`, `_ga_*` | Analítica (Google, terceros) | hasta 13 meses | Medir el uso del sitio, solo con consentimiento |
 
-Y explicar: qué son las cookies, que las necesarias siempre están activas, que las de analítica solo
-se activan con consentimiento, cómo cambiar la decisión más adelante (ideal: un enlace/botón
-"Configurar cookies" en el footer que vuelva a abrir el `CookieBanner`), y que Google es el
-tercero que trata los datos de analítica si se aceptan.
-
-## Resumen de lo que necesito de ti para poder terminar esto
-
-- El ID de GTM (`GTM-XXXXXXX`) una vez creado el contenedor.
-- Confirmación de si la cuenta de Google Analytics/GTM la crea el cliente (LRC) o tú, para saber a
-  qué email pedirte que me des acceso de "Editor" en GTM cuando toque implementarlo.
-- Los datos fiscales reales de la empresa para el aviso legal y la política de privacidad (razón
-  social, NIF/CIF, domicilio social).
+El footer y la propia política tienen un botón "Configurar cookies" que borra la decisión y vuelve a
+mostrar el banner. Aceptar y rechazar tienen el mismo peso visual (requisito de la AEPD).
