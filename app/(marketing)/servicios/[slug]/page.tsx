@@ -24,7 +24,6 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     title: `${service.title} | La Reina de la Casa`,
     description: service.metaDescription,
     path: `/servicios/${service.slug}`,
-    image: service.heroImage,
   });
 }
 

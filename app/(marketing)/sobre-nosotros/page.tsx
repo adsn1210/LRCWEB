@@ -13,7 +13,6 @@ export const metadata: Metadata = pageMetadata({
   description:
     "Fabricamos e instalamos encimeras y reformas en Madrid con taller propio y un único equipo, de la primera visita a la última pieza.",
   path: "/sobre-nosotros",
-  image: "/images/sobre-nosotros/showroom-taller.jpg",
 });
 
 // TODO: contenido genérico a falta de historia real, fecha de fundación y equipo que facilite

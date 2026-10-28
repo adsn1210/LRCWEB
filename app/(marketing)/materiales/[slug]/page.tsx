@@ -22,7 +22,6 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     title: `${material.title} | La Reina de la Casa`,
     description: material.metaDescription,
     path: `/materiales/${material.slug}`,
-    image: material.heroImage,
   });
 }
 
