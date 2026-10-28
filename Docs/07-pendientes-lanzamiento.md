@@ -31,17 +31,13 @@ Sin medición no se sabe si la web genera tráfico ni leads. Estado a 2026-10-28
 Eventos que hay que dar de alta como eventos clave (se pueden crear por nombre antes de que lleguen):
 `lead_form_submit`, `phone_click`, `whatsapp_click`, `email_click`.
 
-### 1.2 Dominio canónico — decisión pendiente
+### 1.2 Dominio canónico — ✅ resuelto 2026-10-28
 
-El código y la documentación dicen que el dominio canónico es `lareinadelacasa.com` **sin www**
-(`lib/site.ts`), pero en Vercel está configurado al revés: `lareinadelacasa.com` redirige (308) a
-`www.lareinadelacasa.com`. Consecuencia: sitemap, robots, canonical y JSON-LD anuncian URLs que
-redirigen. Hay que alinearlo de una de estas dos formas:
-
-- **Recomendado**: en Vercel → Settings → Domains, marcar `lareinadelacasa.com` como dominio
-  principal y `www` como redirección. No hay que tocar código.
-- Alternativa: dejar `www` como principal y poner `NEXT_PUBLIC_SITE_URL=https://www.lareinadelacasa.com`
-  en Vercel (y redeploy). Actualizar entonces el comentario de `lib/site.ts` y este documento.
+El dominio canónico es `lareinadelacasa.com` **sin www** (`lib/site.ts`). Hasta el 2026-10-28
+Vercel lo tenía al revés (el apex redirigía a `www`), así que sitemap, robots y canonical
+anunciaban URLs que redirigían. Corregido en Vercel → Settings → Domains: `lareinadelacasa.com`
+sirve la web y `www.lareinadelacasa.com` redirige con 308 al apex. Verificado: las 14 URLs del
+sitemap responden 200 y la canonical coincide con la URL servida.
 
 ### 1.3 Contenido pendiente del cliente
 

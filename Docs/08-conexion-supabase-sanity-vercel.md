@@ -109,9 +109,6 @@ build: tras cambiarlos hay que hacer **Redeploy** para que surtan efecto.
 
 ### 3.3 Dominio custom (Hostinger → Vercel)
 
-> **Atención (2026-10-28)**: en producción está al revés — `lareinadelacasa.com` redirige a `www`.
-> Ver `Docs/07-pendientes-lanzamiento.md` sección 1.2 para alinearlo.
-
 **Dominio canónico: `lareinadelacasa.com` (sin `www`)** — decisión del 2026-09-04, para que coincida
 con el flujo de datos ya creado en GA4. `www.lareinadelacasa.com` debe existir solo como redirección
 301 hacia el dominio sin `www`, nunca como sitio independiente (evita contenido duplicado de cara a
