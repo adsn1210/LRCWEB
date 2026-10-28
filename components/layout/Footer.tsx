@@ -3,7 +3,8 @@ import Link from "next/link";
 import { CameraIcon, ChatIcon, MailIcon, MusicNoteIcon, PhoneIcon, PinIcon, PlayIcon } from "@/components/ui/icons";
 import { ManageCookiesButton } from "@/components/layout/ManageCookiesButton";
 import { PhoneMenu } from "@/components/ui/PhoneMenu";
-import { PHONE_NUMBER_DISPLAY } from "@/lib/site";
+import { TrackedEmailLink } from "@/components/ui/TrackedEmailLink";
+import { CONTACT_EMAIL, PHONE_NUMBER_DISPLAY, SHOWROOM_ADDRESS } from "@/lib/site";
 
 const serviceLinks = [
   { label: "Encimeras de cocina", href: "/servicios/encimeras-de-cocina" },
@@ -29,13 +30,15 @@ const legalLinks = [
   { label: "Política de cookies", href: "/politica-de-cookies" },
 ];
 
-// TODO: sustituir "#" por las URLs reales de redes sociales de LRC (Docs/03-arquitectura-informacion-sitemap.md: TikTok, Facebook, Instagram, YouTube)
-const socialLinks = [
-  { label: "Instagram", href: "#", icon: CameraIcon },
-  { label: "Facebook", href: "#", icon: ChatIcon },
-  { label: "TikTok", href: "#", icon: MusicNoteIcon },
-  { label: "YouTube", href: "#", icon: PlayIcon },
+// TODO: rellenar las URLs reales de redes sociales de LRC (Docs/03-arquitectura-informacion-sitemap.md).
+// Solo se pintan las que tienen URL: un icono que enlaza a "#" parece una web a medio hacer.
+const socialLinks: { label: string; href: string | null; icon: typeof CameraIcon }[] = [
+  { label: "Instagram", href: null, icon: CameraIcon },
+  { label: "Facebook", href: null, icon: ChatIcon },
+  { label: "TikTok", href: null, icon: MusicNoteIcon },
+  { label: "YouTube", href: null, icon: PlayIcon },
 ];
+const activeSocialLinks = socialLinks.filter((link): link is typeof link & { href: string } => link.href !== null);
 
 export function Footer() {
   return (
@@ -47,18 +50,22 @@ export function Footer() {
             <p className="mt-4 text-sm text-ink-700">
               Encimeras de cocina y reformas integrales en Madrid. Fabricación e instalación propia.
             </p>
-            <div className="mt-5 flex flex-wrap gap-2.5">
-              {socialLinks.map(({ label, href, icon: Icon }) => (
-                <a
-                  key={label}
-                  href={href}
-                  aria-label={label}
-                  className="flex h-11 w-11 items-center justify-center border border-base-200 text-ink-700 hover:border-accent-500 hover:text-accent-600"
-                >
-                  <Icon className="h-4 w-4" />
-                </a>
-              ))}
-            </div>
+            {activeSocialLinks.length > 0 && (
+              <div className="mt-5 flex flex-wrap gap-2.5">
+                {activeSocialLinks.map(({ label, href, icon: Icon }) => (
+                  <a
+                    key={label}
+                    href={href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={label}
+                    className="flex h-11 w-11 items-center justify-center border border-base-200 text-ink-700 hover:border-accent-500 hover:text-accent-600"
+                  >
+                    <Icon className="h-4 w-4" />
+                  </a>
+                ))}
+              </div>
+            )}
           </div>
 
           <FooterColumn title="Servicios" links={serviceLinks} />
@@ -67,18 +74,20 @@ export function Footer() {
           <div>
             <p className="text-xs font-bold uppercase tracking-wide text-ink-900">Contacto</p>
             <div className="mt-4 flex flex-col gap-3.5">
-              <p className="flex items-start gap-2.5 text-sm text-ink-700">
-                <PinIcon className="mt-0.5 h-4 w-4 shrink-0 text-accent-600" />
-                [Dirección showroom], Madrid
-              </p>
+              {SHOWROOM_ADDRESS && (
+                <p className="flex items-start gap-2.5 text-sm text-ink-700">
+                  <PinIcon className="mt-0.5 h-4 w-4 shrink-0 text-accent-600" />
+                  {SHOWROOM_ADDRESS}
+                </p>
+              )}
               <PhoneMenu source="footer" className="flex items-center gap-2.5 text-sm text-ink-700">
                 <PhoneIcon className="h-4 w-4 shrink-0 text-accent-600" />
                 {PHONE_NUMBER_DISPLAY}
               </PhoneMenu>
-              <a href="mailto:info@lareinadelacasa.com" className="flex items-center gap-2.5 text-sm text-ink-700">
+              <TrackedEmailLink source="footer" className="flex items-center gap-2.5 text-sm text-ink-700">
                 <MailIcon className="h-4 w-4 shrink-0 text-accent-600" />
-                info@lareinadelacasa.com
-              </a>
+                {CONTACT_EMAIL}
+              </TrackedEmailLink>
             </div>
           </div>
         </div>

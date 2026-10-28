@@ -2,14 +2,17 @@ import type { Metadata } from "next";
 import { ProjectWizard } from "@/components/forms/ProjectWizard";
 import { ClockIcon, MailIcon, PhoneIcon, PinIcon, WhatsAppIcon } from "@/components/ui/icons";
 import { PhoneMenu } from "@/components/ui/PhoneMenu";
+import { TrackedEmailLink } from "@/components/ui/TrackedEmailLink";
 import { TrackedWhatsAppLink } from "@/components/ui/TrackedWhatsAppLink";
-import { PHONE_NUMBER_DISPLAY } from "@/lib/site";
+import { CONTACT_EMAIL, PHONE_NUMBER_DISPLAY, SHOWROOM_ADDRESS } from "@/lib/site";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Contacto | La Reina de la Casa",
   description:
     "Pide presupuesto sin compromiso para tu encimera o reforma en Madrid: teléfono, WhatsApp, email y formulario de contacto.",
-};
+  path: "/contacto",
+});
 
 export default function ContactoPage() {
   return (
@@ -43,14 +46,16 @@ export default function ContactoPage() {
                 <WhatsAppIcon className="h-5 w-5 text-accent-600" />
                 Escríbenos por WhatsApp
               </TrackedWhatsAppLink>
-              <a href="mailto:info@lareinadelacasa.com" className="flex items-center gap-3 text-base font-semibold text-ink-900">
+              <TrackedEmailLink source="contacto_page" className="flex items-center gap-3 text-base font-semibold text-ink-900">
                 <MailIcon className="h-5 w-5 text-accent-600" />
-                info@lareinadelacasa.com
-              </a>
-              <p className="flex items-start gap-3 text-base text-ink-700">
-                <PinIcon className="mt-0.5 h-5 w-5 shrink-0 text-accent-600" />
-                [Dirección showroom], Madrid
-              </p>
+                {CONTACT_EMAIL}
+              </TrackedEmailLink>
+              {SHOWROOM_ADDRESS && (
+                <p className="flex items-start gap-3 text-base text-ink-700">
+                  <PinIcon className="mt-0.5 h-5 w-5 shrink-0 text-accent-600" />
+                  {SHOWROOM_ADDRESS}
+                </p>
+              )}
               <p className="flex items-start gap-3 text-base text-ink-700">
                 <ClockIcon className="mt-0.5 h-5 w-5 shrink-0 text-accent-600" />
                 <span>
@@ -61,10 +66,8 @@ export default function ContactoPage() {
               </p>
             </div>
 
-            {/* TODO: sustituir por un mapa de Google Maps embebido cuando LRC facilite la dirección del showroom */}
-            <div className="flex h-64 items-center justify-center border border-dashed border-base-200 bg-base-100 px-6 text-center">
-              <p className="text-sm text-ink-700">Mapa del showroom — pendiente de la dirección real</p>
-            </div>
+            {/* TODO: mapa de Google Maps embebido (con evento map_click, Docs/BACKEND.md sección 6)
+                cuando LRC facilite la dirección del showroom. */}
           </div>
         </div>
       </section>

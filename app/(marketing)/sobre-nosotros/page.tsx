@@ -5,12 +5,16 @@ import { ProcessSteps } from "@/components/marketing/ProcessSteps";
 import { CtaBand } from "@/components/marketing/CtaBand";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { PinIcon } from "@/components/ui/icons";
+import { pageMetadata } from "@/lib/seo";
+import { SHOWROOM_ADDRESS } from "@/lib/site";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Sobre nosotros | La Reina de la Casa",
   description:
     "Fabricamos e instalamos encimeras y reformas en Madrid con taller propio y un único equipo, de la primera visita a la última pieza.",
-};
+  path: "/sobre-nosotros",
+  image: "/images/sobre-nosotros/showroom-taller.jpg",
+});
 
 // TODO: contenido genérico a falta de historia real, fecha de fundación y equipo que facilite
 // LRC (ver Docs/05-contenidos-y-diseno.md "Activos que hay que recopilar del cliente"). Página
@@ -85,7 +89,7 @@ export default function SobreNosotrosPage() {
             </p>
             <p className="mt-5 flex items-start gap-2.5 text-sm text-ink-700">
               <PinIcon className="mt-0.5 h-4 w-4 shrink-0 text-accent-600" />
-              [Dirección showroom], Madrid — visítanos con cita previa
+              {SHOWROOM_ADDRESS ?? "Madrid"} — visítanos con cita previa
             </p>
           </div>
         </div>

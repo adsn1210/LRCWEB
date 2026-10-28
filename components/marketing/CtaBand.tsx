@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { MailIcon, PhoneIcon } from "@/components/ui/icons";
 import { PhoneMenu } from "@/components/ui/PhoneMenu";
-import { PHONE_NUMBER_DISPLAY } from "@/lib/site";
+import { TrackedEmailLink } from "@/components/ui/TrackedEmailLink";
+import { CONTACT_EMAIL, PHONE_NUMBER_DISPLAY } from "@/lib/site";
 
 type CtaBandProps = {
   title?: string;
@@ -26,10 +27,10 @@ export function CtaBand({
               <PhoneIcon className="h-5 w-5 text-brand-beige" />
               {PHONE_NUMBER_DISPLAY}
             </PhoneMenu>
-            <a href="mailto:info@lareinadelacasa.com" className="flex items-center gap-2.5 text-[15px] font-semibold text-white">
+            <TrackedEmailLink source="cta_band" className="flex items-center gap-2.5 text-[15px] font-semibold text-white">
               <MailIcon className="h-5 w-5 text-brand-beige" />
-              info@lareinadelacasa.com
-            </a>
+              {CONTACT_EMAIL}
+            </TrackedEmailLink>
           </div>
         </div>
         <Link

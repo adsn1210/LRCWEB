@@ -13,3 +13,10 @@ export const WHATSAPP_URL = `https://wa.me/34602023456?text=${encodeURIComponent
 // aviso legal) no puedan desincronizarse entre sí ni del número de WhatsApp de arriba.
 export const PHONE_NUMBER_DISPLAY = "+34 602 02 34 56";
 export const PHONE_NUMBER_TEL = "+34602023456";
+
+export const CONTACT_EMAIL = "info@lareinadelacasa.com";
+
+// Dirección del showroom, pendiente de que LRC la facilite. Mientras sea null, footer, /contacto y
+// /sobre-nosotros no muestran ninguna línea de dirección (antes se veía "[Dirección showroom]" en
+// todas las páginas). Al rellenarla, añadir también address/geo al JSON-LD de app/(marketing)/layout.tsx.
+export const SHOWROOM_ADDRESS: string | null = null;
