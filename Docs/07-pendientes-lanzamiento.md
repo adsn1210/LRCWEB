@@ -16,20 +16,26 @@ para la conexión de servicios.
 
 ### 1.1 Medición (GA4 / GTM) — lo más urgente
 
-Sin medición no se sabe si la web genera tráfico ni leads. Estado a 2026-10-28:
+Sin medición no se sabe si la web genera tráfico ni leads. Estado a 2026-10-29:
 
 | Punto | Estado | Quién / dónde |
 |---|---|---|
 | GTM carga y ejecuta la etiqueta de GA4 | ✅ corregido 2026-10-28 (ver 2.3) | — |
-| Marcar los eventos de lead como **eventos clave** | ❌ hoy solo existe `purchase` (el de serie) | GA4 → Administrar → Eventos clave |
-| Subir la **retención de datos** de 2 a 14 meses | ❌ está en 2 meses | GA4 → Administrar → Recogida y retención de datos |
-| Pausar la etiqueta GTM que envía `lrc-web-Evento` en cada página | ❌ ensucia los informes | GTM → Etiquetas → publicar |
-| Conectar **Google Search Console** y enviar el sitemap | ❓ sin verificar | search.google.com/search-console |
-| Vincular Search Console con GA4 | ❓ sin verificar | GA4 → Administrar → Vinculaciones |
+| Eventos clave `lead_form_submit`, `phone_click`, `whatsapp_click`, `email_click` | ✅ 2026-10-29 (creados "con código": el código ya los envía) | GA4 → Administrar → Eventos clave |
+| Retención de datos a 14 meses | ✅ 2026-10-29 | GA4 → Administrar → Retención de datos |
+| Etiqueta GTM que enviaba `lrc-web-Evento` en cada página | ✅ pausada 2026-10-29 (contenedor v3) | GTM → Etiquetas |
+| Google Search Console (propiedad de **Dominio**, verificada por TXT en Hostinger) + sitemap | ✅ 2026-10-29 | search.google.com/search-console |
+| Imagen de marca al compartir (WhatsApp, redes) | ✅ 2026-10-29, `public/og-image.jpg` | diseño fuente en `scripts/og-image/` |
+| Vincular Search Console con GA4 | ❌ pendiente | GA4 → Administrar → Vinculaciones de productos |
 | Ficha de **Google Business Profile** con enlace a la web | ❓ sin verificar | business.google.com |
 
-Eventos que hay que dar de alta como eventos clave (se pueden crear por nombre antes de que lleguen):
-`lead_form_submit`, `phone_click`, `whatsapp_click`, `email_click`.
+La "confirmación de recogida de datos de usuario" que ofrece GA4 no se ha aceptado: no hace falta
+para nada de lo anterior (solo para Google Signals o datos proporcionados por el usuario) y es una
+declaración legal de la empresa, a decidir por LRC.
+
+DNS (Hostinger): además del TXT de Google en `@`, hay SPF de Hostinger en `@`, `_dmarc`, y DKIM/SPF
+de Resend en `resend._domainkey.contact` y `send.contact`. No tocar estos últimos: firman los
+avisos de leads.
 
 ### 1.2 Dominio canónico — ✅ resuelto 2026-10-28
 
