@@ -11,12 +11,14 @@ import { ProcessSteps } from "@/components/marketing/ProcessSteps";
 import { CtaBand } from "@/components/marketing/CtaBand";
 import { ArrowRightIcon, BathIcon, CountertopIcon, HouseIcon, PotIcon } from "@/components/ui/icons";
 import { materials as materialsContent } from "@/lib/content/materials";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "La Reina de la Casa | Encimeras y reformas en Madrid",
   description:
     "Encimeras de cocina (porcelánico, cuarzo compacto, granito), muebles a medida y reformas integrales de cocina, baño y vivienda en Madrid.",
-};
+  path: "/",
+});
 
 // La home ahora lee siteSettings.heroImage de Sanity (ver getHeroImageUrl más abajo); sin
 // revalidate quedaría fija en el contenido del build. Mismo intervalo que las páginas de
@@ -122,7 +124,7 @@ export default async function Home() {
               <h2 className="mt-2.5 font-serif text-3xl font-semibold text-ink-900 md:text-4xl">Un equipo, todo el proceso</h2>
             </div>
             <p className="max-w-sm text-base leading-relaxed text-ink-700">
-              Del encimera suelta a la reforma integral: nos encargamos del diseño, la fabricación y la instalación.
+              De la encimera suelta a la reforma integral: nos encargamos del diseño, la fabricación y la instalación.
             </p>
           </div>
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">

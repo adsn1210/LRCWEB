@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Política de privacidad | La Reina de la Casa",
   description: "Cómo tratamos los datos que nos facilitas a través del formulario de contacto de lareinadelacasa.com.",
-};
+  path: "/politica-de-privacidad",
+});
 
 const h2 = "font-serif text-2xl font-semibold text-ink-900 mt-10 first:mt-0";
 const p = "mt-4 text-base leading-relaxed text-ink-700";

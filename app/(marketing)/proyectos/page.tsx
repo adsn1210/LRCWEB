@@ -5,12 +5,14 @@ import { CtaBand } from "@/components/marketing/CtaBand";
 import { getProjects } from "@/lib/sanity-projects";
 import { services } from "@/lib/content/services";
 import { materials } from "@/lib/content/materials";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Proyectos | La Reina de la Casa",
   description:
     "Encimeras y reformas realizadas en Madrid y alrededores: filtra por tipo de servicio y material para ver ejemplos reales.",
-};
+  path: "/proyectos",
+});
 
 // Mismo intervalo que la home (Docs/BACKEND.md sección 5) — sin esto la lista de proyectos
 // quedaría fija en el contenido del build.

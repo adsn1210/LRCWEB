@@ -6,6 +6,7 @@ import { CtaBand } from "@/components/marketing/CtaBand";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { getMaterialBySlug, materials } from "@/lib/content/materials";
 import { getProjects, toProjectCardData } from "@/lib/sanity-projects";
+import { pageMetadata } from "@/lib/seo";
 
 export const revalidate = 3600;
 
@@ -17,10 +18,12 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const material = getMaterialBySlug(slug);
   if (!material) return {};
-  return {
+  return pageMetadata({
     title: `${material.title} | La Reina de la Casa`,
     description: material.metaDescription,
-  };
+    path: `/materiales/${material.slug}`,
+    image: material.heroImage,
+  });
 }
 
 export default async function MaterialPage({ params }: { params: Promise<{ slug: string }> }) {

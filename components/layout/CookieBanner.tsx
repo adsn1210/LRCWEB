@@ -51,8 +51,9 @@ function writeConsentCookie(value: ConsentValue) {
   document.cookie = `${CONSENT_COOKIE}=${encodeURIComponent(JSON.stringify(value))}; path=/; max-age=${CONSENT_MAX_AGE}; SameSite=Lax`;
 }
 
-// Empuja la decisión a Consent Mode v2 una vez GTM esté cargado (Docs/BACKEND.md sección 6).
-// GTM todavía no está integrado (falta NEXT_PUBLIC_GTM_ID), así que hoy esto es un no-op seguro.
+// Empuja la decisión a Consent Mode v2 (Docs/BACKEND.md sección 6). `gtag` lo define el script
+// consent-default de app/layout.tsx; si NEXT_PUBLIC_GTM_ID no está configurado no existe y esto
+// es un no-op seguro.
 function pushConsentUpdate(value: ConsentValue) {
   const w = window as typeof window & { gtag?: (...args: unknown[]) => void };
   w.gtag?.("consent", "update", {

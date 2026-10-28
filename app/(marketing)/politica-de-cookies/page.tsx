@@ -1,11 +1,13 @@
 import type { Metadata } from "next";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { ManageCookiesButton } from "@/components/layout/ManageCookiesButton";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Política de cookies | La Reina de la Casa",
   description: "Qué cookies utiliza lareinadelacasa.com, con qué finalidad y cómo puedes gestionar tus preferencias.",
-};
+  path: "/politica-de-cookies",
+});
 
 const h2 = "font-serif text-2xl font-semibold text-ink-900 mt-10 first:mt-0";
 const p = "mt-4 text-base leading-relaxed text-ink-700";

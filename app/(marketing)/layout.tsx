@@ -4,9 +4,8 @@ import { Footer } from "@/components/layout/Footer";
 import { WhatsAppButton } from "@/components/layout/WhatsAppButton";
 import { ProjectWizardButton } from "@/components/layout/ProjectWizardButton";
 import { CookieBanner } from "@/components/layout/CookieBanner";
+import { GTM_ID } from "@/lib/analytics";
 import { PHONE_NUMBER_TEL, SITE_URL } from "@/lib/site";
-
-const GTM_ID = process.env.NEXT_PUBLIC_GTM_ID;
 
 // JSON-LD LocalBusiness (Docs/BACKEND.md sección 5). TODO: añadir dirección completa (address/geo)
 // en cuanto LRC facilite los datos del showroom.

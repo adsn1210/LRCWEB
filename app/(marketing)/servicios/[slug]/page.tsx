@@ -8,6 +8,7 @@ import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { getServiceBySlug, services } from "@/lib/content/services";
 import { getProjects, toProjectCardData } from "@/lib/sanity-projects";
 import { SITE_URL } from "@/lib/site";
+import { pageMetadata } from "@/lib/seo";
 
 export const revalidate = 3600;
 
@@ -19,10 +20,12 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const service = getServiceBySlug(slug);
   if (!service) return {};
-  return {
+  return pageMetadata({
     title: `${service.title} | La Reina de la Casa`,
     description: service.metaDescription,
-  };
+    path: `/servicios/${service.slug}`,
+    image: service.heroImage,
+  });
 }
 
 export default async function ServicioPage({ params }: { params: Promise<{ slug: string }> }) {

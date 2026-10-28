@@ -1,11 +1,13 @@
 import type { Metadata } from "next";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { PHONE_NUMBER_DISPLAY } from "@/lib/site";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Aviso legal | La Reina de la Casa",
   description: "Datos identificativos, condiciones de uso y propiedad intelectual de lareinadelacasa.com.",
-};
+  path: "/aviso-legal",
+});
 
 const h2 = "font-serif text-2xl font-semibold text-ink-900 mt-10 first:mt-0";
 const p = "mt-4 text-base leading-relaxed text-ink-700";

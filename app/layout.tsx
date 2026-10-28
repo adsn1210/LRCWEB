@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import { Fraunces, Inter } from "next/font/google";
 import Script from "next/script";
+import { GTM_ID } from "@/lib/analytics";
+import { SITE_URL } from "@/lib/site";
 import "./globals.css";
-
-const GTM_ID = process.env.NEXT_PUBLIC_GTM_ID;
 
 const fraunces = Fraunces({
   variable: "--font-fraunces",
@@ -15,7 +15,9 @@ const inter = Inter({
   subsets: ["latin"],
 });
 
+// metadataBase: base para las URLs relativas de canonical y Open Graph (lib/seo.ts).
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: "La Reina de la Casa | Encimeras y reformas en Madrid",
   description:
     "Encimeras de cocina (porcelánico, cuarzo compacto, granito), muebles a medida y reformas integrales de cocina, baño y vivienda en Madrid.",
